@@ -28,6 +28,7 @@ export default function ImageZoom({ src, alt, width = 300, height = 300, classNa
           width={width}
           height={height}
           className={`transition-transform duration-300 hover:scale-105 ${className}`}
+          style={{ width: 'auto', height: 'auto' }}
         />
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
           <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

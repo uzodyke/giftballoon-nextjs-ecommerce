@@ -1,8 +1,15 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Star, Heart, Gift, MapPin } from 'lucide-react'
+import { products } from '@/data/products'
 
 export default function Home() {
+  // Featured products for hero section
+  const featuredProducts = [
+    products.find(p => p.id === 'luxury-stuffed-balloons'),
+    products.find(p => p.id === 'golden-treasure-balloon')
+  ].filter(Boolean)
+
   return (
     <div>
       {/* Hero Section */}
@@ -11,10 +18,13 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                Create Magical
-                <span className="text-pink-600"> Moments</span>
+                Personalised Love
+                <span className="text-pink-600"> Balloon Bouquet</span>
               </h1>
-              <p className="text-xl text-gray-700 mb-8">
+              <p className="text-xl text-gray-700 mb-4">
+                From £25
+              </p>
+              <p className="text-lg text-gray-600 mb-8">
                 Beautiful balloon arrangements for every celebration. From intimate gatherings to grand events, we bring your vision to life with stunning balloon displays.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -46,8 +56,14 @@ export default function Home() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-pink-200 rounded-2xl shadow-2xl p-8 text-center">
-                <div className="text-6xl mb-4">🎈</div>
+              <div className="bg-white rounded-2xl shadow-2xl p-8">
+                <Image
+                  src="/images/love-bouquet-30.jpg"
+                  alt="Personalised Love Balloon Bouquet"
+                  width={400}
+                  height={400}
+                  className="w-full h-auto rounded-xl"
+                />
                 <p className="text-gray-700">Beautiful balloon arrangements coming soon!</p>
               </div>
             </div>
@@ -55,48 +71,85 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Featured Collections Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose GiftBalloon?
+              Featured Collections
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We're passionate about creating unforgettable experiences through beautiful balloon decorations
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-8 rounded-xl border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Heart className="w-8 h-8 text-pink-600" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {featuredProducts.map((product) => (
+              <div key={product.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div className="aspect-square relative">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{product.name}</h3>
+                  <p className="text-2xl font-bold text-pink-600 mb-4">£{product.price.toFixed(2)}</p>
+                  <Link
+                    href={`/product/${product.id}`}
+                    className="bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors inline-block"
+                  >
+                    View Details
+                  </Link>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Premium Quality</h3>
-              <p className="text-gray-600">
-                We use only the highest quality balloons and materials to ensure your decorations look stunning and last longer.
-              </p>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-            <div className="text-center p-8 rounded-xl border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Gift className="w-8 h-8 text-pink-600" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Custom Designs</h3>
-              <p className="text-gray-600">
-                Every event is unique. We create personalized balloon arrangements that perfectly match your style and theme.
-              </p>
-            </div>
+      {/* Personalised Balloon Collection Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Personalised Balloon Collection
+            </h2>
+          </div>
 
-            <div className="text-center p-8 rounded-xl border border-gray-100 hover:shadow-lg transition-shadow">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <MapPin className="w-8 h-8 text-pink-600" />
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <div key={product.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="aspect-square relative">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={300}
+                    height={300}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{product.name}</h3>
+                  <p className="text-xl font-bold text-pink-600 mb-3">£{product.price.toFixed(2)}</p>
+                  <Link
+                    href={`/product/${product.id}`}
+                    className="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition-colors inline-block text-sm"
+                  >
+                    View Details
+                  </Link>
+                </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Nationwide Delivery</h3>
-              <p className="text-gray-600">
-                We deliver across the UK, bringing beautiful balloon arrangements directly to your event location.
-              </p>
-            </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              href="/shop"
+              className="bg-pink-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-pink-700 transition-colors"
+            >
+              View All Products
+            </Link>
           </div>
         </div>
       </section>

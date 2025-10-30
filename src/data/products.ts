@@ -16,154 +16,246 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: 'birthday-deluxe-1',
-    name: 'Happy Birthday Deluxe Balloon Bouquet',
-    description: 'A vibrant and colorful balloon arrangement perfect for birthday celebrations. Includes premium latex balloons, foil number balloons, and decorative ribbons.',
-    price: 29.99,
-    image: '/images/balloon-bouquet-1.jpg',
+    id: 'heart-stuffed-balloon',
+    name: 'Heart Stuffed Balloon',
+    description: 'Beautiful heart-shaped balloon perfect for romantic occasions. Filled with surprises and designed to capture hearts.',
+    price: 30.85,
+    image: '/images/heart-stuffed-balloon-30-85.jpg',
     images: [
-      '/images/balloon-bouquet-1.jpg',
-      '/images/balloon-bouquet-1-alt.jpg'
+      '/images/heart-stuffed-balloon-30-85.jpg'
     ],
-    category: 'Birthday',
+    category: 'Romance',
     inStock: true,
     options: {
       styles: [
-        { name: 'Standard', price: 0 },
-        { name: 'Premium with Number', price: 10 },
-        { name: 'Deluxe with Foil Shapes', price: 20 }
-      ],
-      sizes: [
-        { name: 'Small (6 balloons)', price: 0 },
-        { name: 'Medium (12 balloons)', price: 15 },
-        { name: 'Large (18 balloons)', price: 30 }
-      ]
-    }
-  },
-  {
-    id: 'wedding-elegant-1',
-    name: 'Elegant Wedding Balloon Arch',
-    description: 'Sophisticated balloon arch arrangement perfect for wedding ceremonies and receptions. Features white, gold, and blush colored balloons with premium finishes.',
-    price: 149.99,
-    image: '/images/wedding-balloons-1.jpg',
-    images: [
-      '/images/wedding-balloons-1.jpg',
-      '/images/wedding-balloons-1-alt.jpg'
-    ],
-    category: 'Wedding',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Classic Arch', price: 0 },
-        { name: 'Heart Shape', price: 50 },
-        { name: 'Custom Design', price: 100 }
-      ],
-      sizes: [
-        { name: 'Small (6ft)', price: 0 },
-        { name: 'Medium (10ft)', price: 75 },
-        { name: 'Large (15ft)', price: 150 }
-      ]
-    }
-  },
-  {
-    id: 'graduation-success-1',
-    name: 'Graduation Success Celebration',
-    description: 'Celebrate academic achievements with this graduation-themed balloon arrangement. Includes graduation cap balloons, star shapes, and school color options.',
-    price: 39.99,
-    image: '/images/graduation-balloons-1.jpg',
-    images: [
-      '/images/graduation-balloons-1.jpg',
-      '/images/graduation-balloons-1-alt.jpg'
-    ],
-    category: 'Graduation',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Basic Bouquet', price: 0 },
-        { name: 'With Graduation Cap', price: 15 },
-        { name: 'School Colors Theme', price: 25 }
+        { name: 'Standard Heart', price: 0 },
+        { name: 'With Love Message', price: 5 },
+        { name: 'Premium Gift Inside', price: 15 }
       ],
       colors: [
-        { name: 'Blue & Gold', price: 0 },
-        { name: 'Red & White', price: 0 },
-        { name: 'Green & Yellow', price: 0 },
-        { name: 'Custom Colors', price: 10 }
+        { name: 'Classic Red', price: 0 },
+        { name: 'Pink Romance', price: 0 },
+        { name: 'Golden Heart', price: 5 }
       ]
     }
   },
   {
-    id: 'corporate-professional-1',
-    name: 'Corporate Event Professional Display',
-    description: 'Professional balloon arrangements suitable for corporate events, product launches, and business celebrations. Customizable with company colors and branding.',
-    price: 89.99,
-    image: '/images/corporate-balloons-1.jpg',
+    id: 'luxury-stuffed-balloons',
+    name: 'Luxury Stuffed Balloons',
+    description: 'Premium luxury balloon arrangement with high-end materials and elegant presentation. Perfect for special celebrations.',
+    price: 45.00,
+    image: '/images/luxury-stuffed-balloons-45.jpg',
     images: [
-      '/images/corporate-balloons-1.jpg',
-      '/images/corporate-balloons-1-alt.jpg'
+      '/images/luxury-stuffed-balloons-45.jpg'
     ],
-    category: 'Corporate',
+    category: 'Luxury',
     inStock: true,
     options: {
       styles: [
-        { name: 'Standard Display', price: 0 },
-        { name: 'With Company Logo', price: 40 },
-        { name: 'Premium Branding Package', price: 80 }
+        { name: 'Classic Luxury', price: 0 },
+        { name: 'Premium Package', price: 20 },
+        { name: 'VIP Experience', price: 50 }
       ],
       sizes: [
-        { name: 'Small Setup', price: 0 },
-        { name: 'Medium Display', price: 50 },
-        { name: 'Large Installation', price: 120 }
+        { name: 'Standard Set', price: 0 },
+        { name: 'Large Display', price: 25 },
+        { name: 'Grand Arrangement', price: 60 }
       ]
     }
   },
   {
-    id: 'anniversary-romantic-1',
-    name: 'Romantic Anniversary Heart Bouquet',
-    description: 'Express your love with this romantic heart-shaped balloon bouquet. Perfect for anniversaries, proposals, and romantic gestures.',
-    price: 34.99,
-    image: '/images/anniversary-balloons-1.jpg',
+    id: 'rose-charm-balloon',
+    name: 'Rose Charm Balloon',
+    description: 'Elegant rose-themed balloon with charming details. Perfect for garden parties, romantic dinners, or floral-themed events.',
+    price: 26.00,
+    image: '/images/rose-charm-balloon-26.jpg',
     images: [
-      '/images/anniversary-balloons-1.jpg',
-      '/images/anniversary-balloons-1-alt.jpg'
+      '/images/rose-charm-balloon-26.jpg'
     ],
-    category: 'Anniversary',
+    category: 'Floral',
     inStock: true,
     options: {
       styles: [
-        { name: 'Classic Hearts', price: 0 },
-        { name: 'With Love Message', price: 12 },
-        { name: 'Premium Foil Hearts', price: 25 }
+        { name: 'Single Rose', price: 0 },
+        { name: 'Rose Bouquet', price: 10 },
+        { name: 'Premium Rose Garden', price: 20 }
       ],
       colors: [
-        { name: 'Red & Pink', price: 0 },
-        { name: 'Gold & White', price: 5 },
-        { name: 'Silver & Black', price: 5 }
+        { name: 'Classic Red Rose', price: 0 },
+        { name: 'Pink Roses', price: 0 },
+        { name: 'White Roses', price: 0 },
+        { name: 'Mixed Roses', price: 5 }
       ]
     }
   },
   {
-    id: 'baby-shower-1',
-    name: 'Baby Shower Celebration Set',
-    description: 'Welcome the new arrival with this adorable baby shower balloon set. Available in blue, pink, or neutral colors with cute baby-themed shapes.',
-    price: 44.99,
-    image: '/images/baby-shower-balloons-1.jpg',
+    id: 'teddy-inside-balloon',
+    name: 'Stuffed Balloon with Teddy Inside',
+    description: 'Surprise balloon with adorable teddy bear inside. Perfect gift for children, birthdays, or anyone who loves cuddly surprises.',
+    price: 35.00,
+    image: '/images/teddy-inside-balloon-35.jpg',
     images: [
-      '/images/baby-shower-balloons-1.jpg',
-      '/images/baby-shower-balloons-1-alt.jpg'
+      '/images/teddy-inside-balloon-35.jpg'
     ],
-    category: 'Baby Shower',
+    category: 'Kids',
     inStock: true,
     options: {
       styles: [
-        { name: 'Basic Bundle', price: 0 },
-        { name: 'With Baby Bottles', price: 18 },
-        { name: 'Deluxe with Stork', price: 35 }
+        { name: 'Standard Teddy', price: 0 },
+        { name: 'Large Teddy', price: 10 },
+        { name: 'Premium Plush', price: 20 }
       ],
       colors: [
+        { name: 'Brown Teddy', price: 0 },
+        { name: 'White Teddy', price: 0 },
+        { name: 'Pink Teddy', price: 0 },
+        { name: 'Custom Color', price: 5 }
+      ]
+    }
+  },
+  {
+    id: 'love-bouquet',
+    name: 'Love Bouquet',
+    description: 'Romantic love-themed balloon bouquet perfect for anniversaries, proposals, or expressing your feelings to someone special.',
+    price: 30.00,
+    image: '/images/love-bouquet-30.jpg',
+    images: [
+      '/images/love-bouquet-30.jpg'
+    ],
+    category: 'Romance',
+    inStock: true,
+    options: {
+      styles: [
+        { name: 'Classic Love', price: 0 },
+        { name: 'Romantic Deluxe', price: 15 },
+        { name: 'Proposal Package', price: 30 }
+      ],
+      sizes: [
+        { name: 'Intimate Bouquet', price: 0 },
+        { name: 'Standard Bouquet', price: 10 },
+        { name: 'Grand Gesture', price: 25 }
+      ]
+    }
+  },
+  {
+    id: 'wine-balloon',
+    name: 'Stuffed Wine Balloon',
+    description: 'Sophisticated balloon arrangement perfect for wine lovers, celebrations, or adult parties. Elegant and mature design.',
+    price: 35.00,
+    image: '/images/wine-balloon-35.jpg',
+    images: [
+      '/images/wine-balloon-35.jpg'
+    ],
+    category: 'Adult',
+    inStock: true,
+    options: {
+      styles: [
+        { name: 'Classic Wine Theme', price: 0 },
+        { name: 'Premium Vintage', price: 15 },
+        { name: 'Luxury Collection', price: 25 }
+      ],
+      colors: [
+        { name: 'Wine Red', price: 0 },
+        { name: 'Champagne Gold', price: 5 },
+        { name: 'Elegant Black', price: 5 }
+      ]
+    }
+  },
+  {
+    id: 'teddy-outside-balloon',
+    name: 'Stuffed Balloon with Teddy Outside',
+    description: 'Charming balloon with teddy bear attached outside. Perfect for children\'s parties, baby showers, or cute gift presentations.',
+    price: 35.00,
+    image: '/images/teddy-outside-balloon-35.jpg',
+    images: [
+      '/images/teddy-outside-balloon-35.jpg'
+    ],
+    category: 'Kids',
+    inStock: true,
+    options: {
+      styles: [
+        { name: 'Standard Design', price: 0 },
+        { name: 'Deluxe Teddy', price: 12 },
+        { name: 'Premium Package', price: 25 }
+      ],
+      colors: [
+        { name: 'Pastel Pink', price: 0 },
         { name: 'Baby Blue', price: 0 },
-        { name: 'Baby Pink', price: 0 },
-        { name: 'Neutral Yellow', price: 0 },
-        { name: 'Mixed Pastels', price: 8 }
+        { name: 'Sunshine Yellow', price: 0 },
+        { name: 'Mixed Colors', price: 5 }
+      ]
+    }
+  },
+  {
+    id: 'golden-treasure-balloon',
+    name: 'Golden Treasure Stuffed Balloon',
+    description: 'Luxurious golden-themed balloon with treasure elements. Perfect for special celebrations, achievements, or milestone events.',
+    price: 35.00,
+    image: '/images/golden-treasure-balloon-35.jpg',
+    images: [
+      '/images/golden-treasure-balloon-35.jpg'
+    ],
+    category: 'Luxury',
+    inStock: true,
+    options: {
+      styles: [
+        { name: 'Standard Golden', price: 0 },
+        { name: 'Premium Treasure', price: 20 },
+        { name: 'Royal Collection', price: 40 }
+      ],
+      sizes: [
+        { name: 'Standard Size', price: 0 },
+        { name: 'Large Display', price: 15 },
+        { name: 'Grand Presentation', price: 35 }
+      ]
+    }
+  },
+  {
+    id: 'simplistic-glow',
+    name: 'Simplistic Glow',
+    description: 'Elegant and minimalist balloon design with a beautiful glow effect. Perfect for modern celebrations and stylish events.',
+    price: 25.00,
+    image: '/images/simplistic-glow-25.jpg',
+    images: [
+      '/images/simplistic-glow-25.jpg'
+    ],
+    category: 'Modern',
+    inStock: true,
+    options: {
+      styles: [
+        { name: 'Classic Glow', price: 0 },
+        { name: 'Enhanced Lighting', price: 10 },
+        { name: 'Premium Illumination', price: 20 }
+      ],
+      colors: [
+        { name: 'Warm White', price: 0 },
+        { name: 'Cool Blue', price: 0 },
+        { name: 'Sunset Orange', price: 0 },
+        { name: 'Multi-Color', price: 8 }
+      ]
+    }
+  },
+  {
+    id: 'picture-special',
+    name: 'Picture Special',
+    description: 'Customizable balloon arrangement with photo integration. Perfect for personalized gifts, memorials, or special photo moments.',
+    price: 40.00,
+    image: '/images/picture-special-40.jpg',
+    images: [
+      '/images/picture-special-40.jpg'
+    ],
+    category: 'Personalized',
+    inStock: true,
+    options: {
+      styles: [
+        { name: 'Single Photo', price: 0 },
+        { name: 'Photo Collage', price: 15 },
+        { name: 'Premium Frame', price: 25 }
+      ],
+      sizes: [
+        { name: 'Standard Photo', price: 0 },
+        { name: 'Large Display', price: 12 },
+        { name: 'Poster Size', price: 25 }
       ]
     }
   }
@@ -171,12 +263,13 @@ export const products: Product[] = [
 
 export const categories = [
   'All',
-  'Birthday',
-  'Wedding',
-  'Graduation',
-  'Corporate',
-  'Anniversary',
-  'Baby Shower'
+  'Romance',
+  'Luxury',
+  'Floral',
+  'Kids',
+  'Adult',
+  'Modern',
+  'Personalized'
 ]
 
 export function getProductById(id: string): Product | undefined {
