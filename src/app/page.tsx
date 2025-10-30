@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { Star, Heart, Gift, MapPin } from 'lucide-react'
 import { products } from '@/data/products'
 
@@ -57,7 +57,7 @@ export default function Home() {
             </div>
             <div className="relative">
               <div className="bg-white rounded-2xl shadow-2xl p-8">
-                <Image
+                <img
                   src="/images/love-bouquet-30.jpg"
                   alt="Personalised Love Balloon Bouquet"
                   width={400}
@@ -84,7 +84,7 @@ export default function Home() {
             {featuredProducts.map((product) => (
               <div key={product.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                 <div className="aspect-square relative">
-                  <Image
+                  <img
                     src={product.image}
                     alt={product.name}
                     width={400}
@@ -121,7 +121,7 @@ export default function Home() {
             {products.map((product) => (
               <div key={product.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="aspect-square relative">
-                  <Image
+                  <img
                     src={product.image}
                     alt={product.name}
                     width={300}

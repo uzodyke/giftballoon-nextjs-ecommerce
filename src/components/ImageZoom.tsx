@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { X, ZoomIn } from 'lucide-react'
 
 interface ImageZoomProps {
@@ -22,7 +22,7 @@ export default function ImageZoom({ src, alt, width = 300, height = 300, classNa
     <>
       {/* Main Image with Zoom Trigger */}
       <div className="relative group cursor-zoom-in" onClick={openZoom}>
-        <Image
+        <img
           src={src}
           alt={alt}
           width={width}
@@ -49,13 +49,12 @@ export default function ImageZoom({ src, alt, width = 300, height = 300, classNa
 
           {/* Zoomed Image */}
           <div className="relative max-w-4xl max-h-full">
-            <Image
+            <img
               src={src}
               alt={alt}
               width={800}
               height={800}
               className="max-w-full max-h-full object-contain"
-              priority
             />
           </div>
 
