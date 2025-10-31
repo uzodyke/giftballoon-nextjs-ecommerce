@@ -8,6 +8,9 @@ export const stripeConfig = {
   currency: 'gbp',
   locale: 'en-GB' as const,
 
+  // Payment methods configuration
+  paymentMethodTypes: ['card', 'apple_pay', 'google_pay'],
+
   // Appearance customization for Stripe Elements
   appearance: {
     theme: 'stripe' as const,
@@ -35,6 +38,26 @@ export const stripeConfig = {
         fontWeight: '500',
         color: '#374151', // gray-700
       },
+      '.PaymentMethodSelector': {
+        border: '1px solid #e5e7eb',
+        borderRadius: '8px',
+        padding: '12px',
+      },
+      '.PaymentMethodSelector:hover': {
+        borderColor: '#db2777',
+      },
+    },
+  },
+
+  // Payment element options
+  paymentElementOptions: {
+    layout: 'tabs',
+    defaultCollapsed: false,
+    radios: false,
+    spacedAccordionItems: false,
+    wallets: {
+      applePay: 'auto',
+      googlePay: 'auto',
     },
   },
 }

@@ -14,9 +14,9 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart()
   const [selectedOptions, setSelectedOptions] = useState<{
-    style?: string
-    size?: string
-    color?: string
+    balloonType?: string
+    customMessage?: string
+    deliveryDate?: string
   }>({})
   const [quantity, setQuantity] = useState(1)
 
@@ -24,25 +24,26 @@ export default function ProductCard({ product }: ProductCardProps) {
   const getPrice = () => {
     let totalPrice = product.price
 
-    if (selectedOptions.style && product.options?.styles) {
-      const styleOption = product.options.styles.find(s => s.name === selectedOptions.style)
-      if (styleOption) totalPrice += styleOption.price
-    }
-
-    if (selectedOptions.size && product.options?.sizes) {
-      const sizeOption = product.options.sizes.find(s => s.name === selectedOptions.size)
-      if (sizeOption) totalPrice += sizeOption.price
-    }
-
-    if (selectedOptions.color && product.options?.colors) {
-      const colorOption = product.options.colors.find(c => c.name === selectedOptions.color)
-      if (colorOption) totalPrice += colorOption.price
+    // Add balloon type pricing if available
+    if (selectedOptions.balloonType && product.options?.styles) {
+      const balloonOption = product.options.styles.find(s => s.name === selectedOptions.balloonType)
+      if (balloonOption) totalPrice += balloonOption.price
     }
 
     return totalPrice
   }
 
   const handleAddToCart = () => {
+    // Validate required fields
+    if (!selectedOptions.balloonType && product.options?.styles) {
+      alert('Please select a balloon type')
+      return
+    }
+    if (!selectedOptions.deliveryDate) {
+      alert('Please select a delivery date')
+      return
+    }
+
     const finalPrice = getPrice()
     addItem({
       id: `${product.id}-${JSON.stringify(selectedOptions)}`,
@@ -53,20 +54,21 @@ export default function ProductCard({ product }: ProductCardProps) {
       selectedOptions
     })
 
+    // Show success message
+    alert(`Added ${product.name} to cart! 🎈`)
+
     // Reset form
     setQuantity(1)
     setSelectedOptions({})
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-      {/* Product Image with Zoom */}
-      <div className="relative h-64 bg-gray-100">
-        <ImageZoom
+    <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-pink-100">
+      {/* Product Image */}
+      <div className="aspect-square relative">
+        <img
           src={product.image}
           alt={product.name}
-          width={400}
-          height={256}
           className="w-full h-full object-cover"
         />
         {!product.inStock && (
@@ -93,20 +95,20 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
 
-        {/* Product Options */}
+        {/* Customization Options */}
         <div className="space-y-3 mb-4">
-          {/* Style Options */}
+          {/* Balloon Type */}
           {product.options?.styles && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Style
+                Balloon Type
               </label>
               <select
-                value={selectedOptions.style || ''}
-                onChange={(e) => setSelectedOptions(prev => ({ ...prev, style: e.target.value }))}
+                value={selectedOptions.balloonType || ''}
+                onChange={(e) => setSelectedOptions(prev => ({ ...prev, balloonType: e.target.value }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
               >
-                <option value="">Select Style</option>
+                <option value="">Select Balloon Type</option>
                 {product.options.styles.map((style) => (
                   <option key={style.name} value={style.name}>
                     {style.name} {style.price > 0 && `(+£${style.price.toFixed(2)})`}
@@ -116,61 +118,58 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
-          {/* Size Options */}
-          {product.options?.sizes && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Size
-              </label>
-              <select
-                value={selectedOptions.size || ''}
-                onChange={(e) => setSelectedOptions(prev => ({ ...prev, size: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-              >
-                <option value="">Select Size</option>
-                {product.options.sizes.map((size) => (
-                  <option key={size.name} value={size.name}>
-                    {size.name} {size.price > 0 && `(+£${size.price.toFixed(2)})`}
-                  </option>
-                ))}
-              </select>
+          {/* Custom Message */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Custom Message <span className="text-gray-500">(30 chars max)</span>
+            </label>
+            <input
+              type="text"
+              maxLength={30}
+              placeholder="Enter your custom message..."
+              value={selectedOptions.customMessage || ''}
+              onChange={(e) => setSelectedOptions(prev => ({ ...prev, customMessage: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+            />
+            <div className="text-xs text-gray-500 mt-1">
+              {(selectedOptions.customMessage || '').length}/30 characters
             </div>
-          )}
+          </div>
 
-          {/* Color Options */}
-          {product.options?.colors && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Color
-              </label>
-              <select
-                value={selectedOptions.color || ''}
-                onChange={(e) => setSelectedOptions(prev => ({ ...prev, color: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-              >
-                <option value="">Select Color</option>
-                {product.options.colors.map((color) => (
-                  <option key={color.name} value={color.name}>
-                    {color.name} {color.price > 0 && `(+£${color.price.toFixed(2)})`}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          {/* Delivery Date */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Delivery Date
+            </label>
+            <input
+              type="date"
+              min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+              value={selectedOptions.deliveryDate || ''}
+              onChange={(e) => setSelectedOptions(prev => ({ ...prev, deliveryDate: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+            />
+          </div>
 
           {/* Quantity */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Quantity
             </label>
-            <input
-              type="number"
-              min="1"
-              max="10"
-              value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-            />
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-8 h-8 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center"
+              >
+                -
+              </button>
+              <span className="text-lg font-medium w-12 text-center">{quantity}</span>
+              <button
+                onClick={() => setQuantity(Math.min(10, quantity + 1))}
+                className="w-8 h-8 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center"
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
 
@@ -190,7 +189,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="bg-pink-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-pink-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 flex items-center gap-2"
+            className="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-pink-600 hover:to-pink-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
           >
             <Plus className="w-4 h-4" />
             Add to Cart

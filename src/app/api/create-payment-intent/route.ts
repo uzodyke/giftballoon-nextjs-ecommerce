@@ -44,7 +44,10 @@ export async function POST(request: NextRequest) {
       },
       automatic_payment_methods: {
         enabled: true,
+        allow_redirects: 'always'
       },
+      description: `GiftBalloon Order ${orderId}`,
+      receipt_email: orderDetails?.customerEmail,
     })
 
     console.log('Payment intent created successfully:', paymentIntent.id)

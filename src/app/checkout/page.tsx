@@ -222,6 +222,7 @@ export default function CheckoutPage() {
                   clientSecret,
                   appearance: stripeConfig.appearance,
                   locale: stripeConfig.locale,
+                  ...stripeConfig.paymentElementOptions,
                 }}
               >
                 <CheckoutForm

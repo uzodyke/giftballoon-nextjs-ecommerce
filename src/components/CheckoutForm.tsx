@@ -235,7 +235,39 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
         </h3>
 
         <div className="p-4 border border-gray-200 rounded-lg">
-          <PaymentElement />
+          <PaymentElement
+            options={{
+              layout: {
+                type: 'tabs',
+                defaultCollapsed: false,
+                radios: false,
+                spacedAccordionItems: false
+              },
+              wallets: {
+                applePay: 'auto',
+                googlePay: 'auto'
+              },
+              fields: {
+                billingDetails: 'auto'
+              }
+            }}
+          />
+        </div>
+
+        {/* Payment Methods Info */}
+        <div className="text-sm text-gray-600">
+          <p className="flex items-center gap-2 mb-2">
+            <span>💳</span>
+            <span>We accept Visa, Mastercard, American Express</span>
+          </p>
+          <p className="flex items-center gap-2 mb-2">
+            <span>📱</span>
+            <span>Apple Pay and Google Pay available</span>
+          </p>
+          <p className="flex items-center gap-2">
+            <span>🔒</span>
+            <span>All payments are secured with 256-bit SSL encryption</span>
+          </p>
         </div>
       </div>
 

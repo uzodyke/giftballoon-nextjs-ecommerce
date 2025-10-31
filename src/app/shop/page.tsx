@@ -1,173 +1,333 @@
 'use client'
 
 import { useState } from 'react'
-import { Search, Filter } from 'lucide-react'
-import { products, categories, getProductsByCategory } from '@/data/products'
-import ProductCard from '@/components/ProductCard'
+import { Plus, Heart, Star, ShoppingCart } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { products } from '@/data/products'
+import { useCart } from '@/context/CartContext'
 
 export default function ShopPage() {
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const { addItem } = useCart()
+  const router = useRouter()
+  const [selectedProduct, setSelectedProduct] = useState(products[0])
+  const [selectedStyle, setSelectedStyle] = useState('Standard')
+  const [customMessage, setCustomMessage] = useState('')
+  const [selectedOccasion, setSelectedOccasion] = useState('')
+  const [deliveryDate, setDeliveryDate] = useState('')
+  const [quantity, setQuantity] = useState(1)
 
-  // Filter products based on category and search
-  const filteredProducts = getProductsByCategory(selectedCategory).filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.category.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const occasions = [
+    'Birthday',
+    'Anniversary',
+    'Wedding',
+    'Valentine\'s Day',
+    'Mother\'s Day',
+    'Father\'s Day',
+    'Graduation',
+    'New Baby',
+    'Get Well Soon',
+    'Congratulations',
+    'Thank You',
+    'Just Because',
+    'Corporate Event',
+    'Grand Opening',
+    'Retirement',
+    'Promotion'
+  ]
+
+  const styles = [
+    { name: 'Standard', price: 0 },
+    { name: 'Premium', price: 5 },
+    { name: 'Luxury', price: 10 }
+  ]
+
+  const getPrice = () => {
+    let totalPrice = selectedProduct.price
+    const styleOption = styles.find(s => s.name === selectedStyle)
+    if (styleOption) totalPrice += styleOption.price
+    return totalPrice
+  }
+
+  const validateForm = () => {
+    if (!selectedOccasion) {
+      alert('Please select an occasion')
+      return false
+    }
+    if (!deliveryDate) {
+      alert('Please select a delivery date')
+      return false
+    }
+    return true
+  }
+
+  const handleAddToCart = () => {
+    if (!validateForm()) return
+
+    const finalPrice = getPrice()
+    addItem({
+      id: `${selectedProduct.id}-${selectedStyle}-${Date.now()}`,
+      name: selectedProduct.name,
+      price: finalPrice,
+      quantity,
+      image: selectedProduct.image,
+      selectedOptions: {
+        style: selectedStyle,
+        message: customMessage,
+        occasion: selectedOccasion,
+        deliveryDate: deliveryDate
+      }
+    })
+
+    alert(`Added ${selectedProduct.name} to cart! 🎈`)
+  }
+
+  const handleBuyNow = () => {
+    if (!validateForm()) return
+
+    // Add to cart
+    const finalPrice = getPrice()
+    addItem({
+      id: `${selectedProduct.id}-${selectedStyle}-${Date.now()}`,
+      name: selectedProduct.name,
+      price: finalPrice,
+      quantity,
+      image: selectedProduct.image,
+      selectedOptions: {
+        style: selectedStyle,
+        message: customMessage,
+        occasion: selectedOccasion,
+        deliveryDate: deliveryDate
+      }
+    })
+
+    // Redirect to checkout
+    router.push('/checkout')
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
       {/* Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-gradient-to-r from-pink-100 to-purple-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Shop Balloon Arrangements
+            Personalized Balloon Collection
           </h1>
           <p className="text-xl text-gray-600">
-            Discover our beautiful collection of balloon arrangements for every occasion
+            Choose your balloon, add a custom message, and select delivery options
           </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters */}
-          <div className="lg:w-64">
-            <div className="bg-white rounded-xl shadow-md p-6">
-              {/* Mobile Filter Toggle */}
-              <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                className="lg:hidden w-full flex items-center justify-between mb-4 p-3 bg-gray-100 rounded-lg"
-              >
-                <span className="font-medium">Filters</span>
-                <Filter className="w-5 h-5" />
-              </button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-              <div className={`space-y-6 ${isFilterOpen ? 'block' : 'hidden lg:block'}`}>
-                {/* Search */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Search Products
-                  </label>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Search balloons..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+          {/* Balloon Selection Grid */}
+          <div className="lg:col-span-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Choose Your Balloon</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  onClick={() => setSelectedProduct(product)}
+                  className={`cursor-pointer rounded-xl overflow-hidden transition-all duration-300 ${
+                    selectedProduct.id === product.id
+                      ? 'ring-4 ring-pink-500 shadow-lg scale-105'
+                      : 'shadow-md hover:shadow-lg hover:scale-105'
+                  }`}
+                >
+                  <div className="aspect-square relative bg-white">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
                     />
+                    {selectedProduct.id === product.id && (
+                      <div className="absolute inset-0 bg-pink-200 bg-opacity-20 flex items-center justify-center">
+                        <div className="bg-white text-pink-600 rounded-full p-2 shadow-xl border-2 border-pink-500">
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3 bg-white">
+                    <h3 className="font-semibold text-sm text-gray-900 text-center truncate">
+                      {product.name}
+                    </h3>
+                    <p className="text-lg font-bold text-pink-600 text-center">
+                      £{product.price.toFixed(2)}
+                    </p>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                {/* Categories */}
+          {/* Customization Form */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
+              <h2 className="text-xl font-bold text-gray-900 mb-6">Customize Your Order</h2>
+
+              {/* Selected Product Display */}
+              <div className="mb-6 p-4 bg-pink-50 rounded-xl">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={selectedProduct.image}
+                    alt={selectedProduct.name}
+                    className="w-16 h-16 object-cover rounded-lg"
+                  />
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{selectedProduct.name}</h3>
+                    <p className="text-pink-600 font-bold">£{getPrice().toFixed(2)}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {/* Style Selection */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Categories</h3>
-                  <div className="space-y-2">
-                    {categories.map((category) => (
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Style
+                  </label>
+                  <div className="grid grid-cols-1 gap-2">
+                    {styles.map((style) => (
                       <button
-                        key={category}
-                        onClick={() => setSelectedCategory(category)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                          selectedCategory === category
-                            ? 'bg-pink-100 text-pink-700 font-medium'
-                            : 'text-gray-600 hover:bg-gray-100'
+                        key={style.name}
+                        onClick={() => setSelectedStyle(style.name)}
+                        className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                          selectedStyle === style.name
+                            ? 'border-pink-500 bg-pink-50 text-pink-700'
+                            : 'border-gray-200 hover:border-pink-300'
                         }`}
                       >
-                        {category}
-                        <span className="float-right text-xs text-gray-400">
-                          {getProductsByCategory(category).length}
-                        </span>
+                        <div className="flex justify-between items-center">
+                          <span>{style.name}</span>
+                          {style.price > 0 && <span>+£{style.price}</span>}
+                        </div>
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Price Range Info */}
+                {/* Occasion Selection */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Price Range</h3>
-                  <div className="text-sm text-gray-600">
-                    <div className="flex justify-between mb-1">
-                      <span>From:</span>
-                      <span className="font-medium">£29.99</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Up to:</span>
-                      <span className="font-medium">£149.99</span>
-                    </div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    What's this for? *
+                  </label>
+                  <select
+                    value={selectedOccasion}
+                    onChange={(e) => setSelectedOccasion(e.target.value)}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                  >
+                    <option value="">Select an occasion</option>
+                    {occasions.map((occasion) => (
+                      <option key={occasion} value={occasion}>{occasion}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Custom Message */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Custom Message <span className="text-gray-500">(30 chars max)</span>
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={30}
+                    placeholder="Enter your message..."
+                    value={customMessage}
+                    onChange={(e) => setCustomMessage(e.target.value)}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                  />
+                  <div className="text-xs text-gray-500 mt-1">
+                    {customMessage.length}/30 characters
                   </div>
                 </div>
 
-                {/* Stock Filter */}
+                {/* Delivery Date */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Availability</h3>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      defaultChecked
-                      className="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
-                    />
-                    <span className="ml-2 text-sm text-gray-600">In Stock Only</span>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Delivery Date *
                   </label>
+                  <input
+                    type="date"
+                    min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                    value={deliveryDate}
+                    onChange={(e) => setDeliveryDate(e.target.value)}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                  />
+                </div>
+
+                {/* Quantity */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Quantity
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center"
+                    >
+                      -
+                    </button>
+                    <span className="text-xl font-medium w-12 text-center">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(Math.min(10, quantity + 1))}
+                      className="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Total Price */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex justify-between items-center text-lg font-bold">
+                    <span>Total:</span>
+                    <span className="text-pink-600">£{(getPrice() * quantity).toFixed(2)}</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-3">
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-full bg-gradient-to-r from-pink-500 to-pink-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-pink-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                  >
+                    <Plus className="w-5 h-5" />
+                    Add to Cart
+                  </button>
+
+                  <button
+                    onClick={handleBuyNow}
+                    className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-purple-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+                  >
+                    <ShoppingCart className="w-5 h-5" />
+                    Buy Now
+                  </button>
+                </div>
+
+                {/* Features */}
+                <div className="text-sm text-gray-600 space-y-1 pt-4 border-t">
+                  <p>✓ Professional vinyl lettering included</p>
+                  <p>✓ Helium filling & decorative ribbon</p>
+                  <p>✓ UK-wide delivery available</p>
+                  <p>✓ 5-7 day float time guarantee</p>
+                </div>
+
+                {/* Payment Methods */}
+                <div className="pt-4 border-t">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Payment Methods</h4>
+                  <div className="flex items-center gap-2 text-xs text-gray-600">
+                    <span>💳 Cards</span>
+                    <span>📱 Apple Pay</span>
+                    <span>🔐 Google Pay</span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Secured by Stripe • SSL Encrypted</p>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Product Grid */}
-          <div className="flex-1">
-            {/* Results Header */}
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-gray-600">
-                Showing {filteredProducts.length} of {products.length} products
-                {selectedCategory !== 'All' && (
-                  <span className="ml-1">in <strong>{selectedCategory}</strong></span>
-                )}
-                {searchQuery && (
-                  <span className="ml-1">matching <strong>"{searchQuery}"</strong></span>
-                )}
-              </p>
-
-              {/* Sort Options */}
-              <select className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500">
-                <option>Sort by: Featured</option>
-                <option>Price: Low to High</option>
-                <option>Price: High to Low</option>
-                <option>Name: A to Z</option>
-                <option>Newest First</option>
-              </select>
-            </div>
-
-            {/* Products Grid */}
-            {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="text-6xl mb-4">🎈</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  No products found
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Try adjusting your search or filter criteria
-                </p>
-                <button
-                  onClick={() => {
-                    setSearchQuery('')
-                    setSelectedCategory('All')
-                  }}
-                  className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700 transition-colors"
-                >
-                  Clear Filters
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>
