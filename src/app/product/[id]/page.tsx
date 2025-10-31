@@ -3,10 +3,9 @@
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Star, Plus, ArrowLeft, Heart, Share2 } from 'lucide-react'
+import { Star, Plus, ArrowLeft, Heart, Share2, ShoppingCart } from 'lucide-react'
 import { getProductById } from '@/data/products'
 import { useCart } from '@/context/CartContext'
-import ImageZoom from '@/components/ImageZoom'
 
 export default function ProductDetailPage() {
   const params = useParams()
@@ -21,7 +20,36 @@ export default function ProductDetailPage() {
     size?: string
     color?: string
   }>({})
+  const [selectedStyle, setSelectedStyle] = useState('Standard')
+  const [customMessage, setCustomMessage] = useState('')
+  const [selectedOccasion, setSelectedOccasion] = useState('')
+  const [deliveryDate, setDeliveryDate] = useState('')
   const [quantity, setQuantity] = useState(1)
+
+  const occasions = [
+    'Birthday',
+    'Anniversary',
+    'Wedding',
+    'Valentine\'s Day',
+    'Mother\'s Day',
+    'Father\'s Day',
+    'Graduation',
+    'New Baby',
+    'Get Well Soon',
+    'Congratulations',
+    'Thank You',
+    'Just Because',
+    'Corporate Event',
+    'Grand Opening',
+    'Retirement',
+    'Promotion'
+  ]
+
+  const styles = [
+    { name: 'Standard', price: 0 },
+    { name: 'Premium', price: 5 },
+    { name: 'Luxury', price: 10 }
+  ]
 
   if (!product) {
     return (
@@ -47,38 +75,65 @@ export default function ProductDetailPage() {
   // Calculate total price including options
   const getPrice = () => {
     let totalPrice = product.price
-
-    if (selectedOptions.style && product.options?.styles) {
-      const styleOption = product.options.styles.find(s => s.name === selectedOptions.style)
-      if (styleOption) totalPrice += styleOption.price
-    }
-
-    if (selectedOptions.size && product.options?.sizes) {
-      const sizeOption = product.options.sizes.find(s => s.name === selectedOptions.size)
-      if (sizeOption) totalPrice += sizeOption.price
-    }
-
-    if (selectedOptions.color && product.options?.colors) {
-      const colorOption = product.options.colors.find(c => c.name === selectedOptions.color)
-      if (colorOption) totalPrice += colorOption.price
-    }
-
+    const styleOption = styles.find(s => s.name === selectedStyle)
+    if (styleOption) totalPrice += styleOption.price
     return totalPrice
   }
 
+  const validateForm = () => {
+    if (!selectedOccasion) {
+      alert('Please select an occasion')
+      return false
+    }
+    if (!deliveryDate) {
+      alert('Please select a delivery date')
+      return false
+    }
+    return true
+  }
+
   const handleAddToCart = () => {
+    if (!validateForm()) return
+
     const finalPrice = getPrice()
     addItem({
-      id: `${product.id}-${JSON.stringify(selectedOptions)}`,
+      id: `${product.id}-${selectedStyle}-${Date.now()}`,
       name: product.name,
       price: finalPrice,
       quantity,
       image: product.image,
-      selectedOptions
+      selectedOptions: {
+        style: selectedStyle,
+        message: customMessage,
+        occasion: selectedOccasion,
+        deliveryDate: deliveryDate
+      }
     })
 
-    // Show success message (you could add a toast here)
-    alert('Product added to cart!')
+    alert(`Added ${product.name} to cart! 🎈`)
+  }
+
+  const handleBuyNow = () => {
+    if (!validateForm()) return
+
+    // Add to cart
+    const finalPrice = getPrice()
+    addItem({
+      id: `${product.id}-${selectedStyle}-${Date.now()}`,
+      name: product.name,
+      price: finalPrice,
+      quantity,
+      image: product.image,
+      selectedOptions: {
+        style: selectedStyle,
+        message: customMessage,
+        occasion: selectedOccasion,
+        deliveryDate: deliveryDate
+      }
+    })
+
+    // Redirect to checkout
+    router.push('/checkout')
   }
 
   return (
@@ -110,12 +165,10 @@ export default function ProductDetailPage() {
           {/* Product Images */}
           <div className="space-y-4">
             <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
-              <ImageZoom
+              <img
                 src={product.image}
                 alt={product.name}
-                width={600}
-                height={600}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover hover:scale-105 transition-transform cursor-pointer"
               />
             </div>
 
@@ -192,85 +245,96 @@ export default function ProductDetailPage() {
 
             {/* Product Options */}
             <div className="space-y-4">
-              {/* Style Options */}
-              {product.options?.styles && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Style
-                  </label>
-                  <select
-                    value={selectedOptions.style || ''}
-                    onChange={(e) => setSelectedOptions(prev => ({ ...prev, style: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                  >
-                    <option value="">Select Style</option>
-                    {product.options.styles.map((style) => (
-                      <option key={style.name} value={style.name}>
-                        {style.name} {style.price > 0 && `(+£${style.price.toFixed(2)})`}
-                      </option>
-                    ))}
-                  </select>
+              {/* Style Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Style
+                </label>
+                <div className="grid grid-cols-1 gap-2">
+                  {styles.map((style) => (
+                    <button
+                      key={style.name}
+                      onClick={() => setSelectedStyle(style.name)}
+                      className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                        selectedStyle === style.name
+                          ? 'border-pink-500 bg-pink-50 text-pink-700'
+                          : 'border-gray-200 hover:border-pink-300'
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span>{style.name}</span>
+                        {style.price > 0 && <span>+£{style.price}</span>}
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
 
-              {/* Size Options */}
-              {product.options?.sizes && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Size
-                  </label>
-                  <select
-                    value={selectedOptions.size || ''}
-                    onChange={(e) => setSelectedOptions(prev => ({ ...prev, size: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                  >
-                    <option value="">Select Size</option>
-                    {product.options.sizes.map((size) => (
-                      <option key={size.name} value={size.name}>
-                        {size.name} {size.price > 0 && `(+£${size.price.toFixed(2)})`}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
+              {/* Occasion Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  What's this for? *
+                </label>
+                <select
+                  value={selectedOccasion}
+                  onChange={(e) => setSelectedOccasion(e.target.value)}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                >
+                  <option value="">Select an occasion</option>
+                  {occasions.map((occasion) => (
+                    <option key={occasion} value={occasion}>{occasion}</option>
+                  ))}
+                </select>
+              </div>
 
-              {/* Color Options */}
-              {product.options?.colors && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Color
-                  </label>
-                  <select
-                    value={selectedOptions.color || ''}
-                    onChange={(e) => setSelectedOptions(prev => ({ ...prev, color: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                  >
-                    <option value="">Select Color</option>
-                    {product.options.colors.map((color) => (
-                      <option key={color.name} value={color.name}>
-                        {color.name} {color.price > 0 && `(+£${color.price.toFixed(2)})`}
-                      </option>
-                    ))}
-                  </select>
+              {/* Custom Message */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Custom Message <span className="text-gray-500">(30 chars max)</span>
+                </label>
+                <input
+                  type="text"
+                  maxLength={30}
+                  placeholder="Enter your message..."
+                  value={customMessage}
+                  onChange={(e) => setCustomMessage(e.target.value)}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                />
+                <div className="text-xs text-gray-500 mt-1">
+                  {customMessage.length}/30 characters
                 </div>
-              )}
+              </div>
+
+              {/* Delivery Date */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Delivery Date *
+                </label>
+                <input
+                  type="date"
+                  min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
+                  value={deliveryDate}
+                  onChange={(e) => setDeliveryDate(e.target.value)}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                />
+              </div>
 
               {/* Quantity */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Quantity
                 </label>
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+                    className="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center"
                   >
                     -
                   </button>
                   <span className="text-xl font-medium w-12 text-center">{quantity}</span>
                   <button
                     onClick={() => setQuantity(Math.min(10, quantity + 1))}
-                    className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+                    className="w-10 h-10 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors flex items-center justify-center"
                   >
                     +
                   </button>
@@ -278,18 +342,35 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Add to Cart */}
-            <div className="space-y-4">
+            {/* Total Price */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="flex justify-between items-center text-lg font-bold">
+                <span>Total:</span>
+                <span className="text-pink-600">£{(getPrice() * quantity).toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-3">
               <button
                 onClick={handleAddToCart}
                 disabled={!product.inStock}
-                className="w-full bg-pink-600 text-white py-4 rounded-lg font-semibold hover:bg-pink-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center gap-2"
+                className="w-full bg-gradient-to-r from-pink-500 to-pink-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-pink-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 <Plus className="w-5 h-5" />
                 Add to Cart
               </button>
 
-              <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={handleBuyNow}
+                disabled={!product.inStock}
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-purple-600 hover:to-purple-700 transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                Buy Now
+              </button>
+
+              <div className="grid grid-cols-2 gap-4 mt-4">
                 <Link
                   href="/cart"
                   className="border-2 border-pink-600 text-pink-600 py-3 rounded-lg font-semibold hover:bg-pink-600 hover:text-white transition-colors text-center"
