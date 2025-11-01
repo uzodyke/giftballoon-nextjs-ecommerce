@@ -10,10 +10,8 @@ export default function ShopPage() {
   const { addItem } = useCart()
   const router = useRouter()
   const [selectedProduct, setSelectedProduct] = useState(products[0])
-  const [selectedStyle, setSelectedStyle] = useState('Standard')
   const [customMessage, setCustomMessage] = useState('')
   const [selectedOccasion, setSelectedOccasion] = useState('')
-  const [deliveryDate, setDeliveryDate] = useState('')
   const [quantity, setQuantity] = useState(1)
 
   const occasions = [
@@ -32,29 +30,18 @@ export default function ShopPage() {
     'Corporate Event',
     'Grand Opening',
     'Retirement',
-    'Promotion'
+    'Promotion',
+    'Other'
   ]
 
-  const styles = [
-    { name: 'Standard', price: 0 },
-    { name: 'Premium', price: 5 },
-    { name: 'Luxury', price: 10 }
-  ]
 
   const getPrice = () => {
-    let totalPrice = selectedProduct.price
-    const styleOption = styles.find(s => s.name === selectedStyle)
-    if (styleOption) totalPrice += styleOption.price
-    return totalPrice
+    return selectedProduct.price
   }
 
   const validateForm = () => {
     if (!selectedOccasion) {
       alert('Please select an occasion')
-      return false
-    }
-    if (!deliveryDate) {
-      alert('Please select a delivery date')
       return false
     }
     return true
@@ -65,16 +52,14 @@ export default function ShopPage() {
 
     const finalPrice = getPrice()
     addItem({
-      id: `${selectedProduct.id}-${selectedStyle}-${Date.now()}`,
+      id: `${selectedProduct.id}-${Date.now()}`,
       name: selectedProduct.name,
       price: finalPrice,
       quantity,
       image: selectedProduct.image,
       selectedOptions: {
-        style: selectedStyle,
         message: customMessage,
-        occasion: selectedOccasion,
-        deliveryDate: deliveryDate
+        occasion: selectedOccasion
       }
     })
 
@@ -87,16 +72,14 @@ export default function ShopPage() {
     // Add to cart
     const finalPrice = getPrice()
     addItem({
-      id: `${selectedProduct.id}-${selectedStyle}-${Date.now()}`,
+      id: `${selectedProduct.id}-${Date.now()}`,
       name: selectedProduct.name,
       price: finalPrice,
       quantity,
       image: selectedProduct.image,
       selectedOptions: {
-        style: selectedStyle,
         message: customMessage,
-        occasion: selectedOccasion,
-        deliveryDate: deliveryDate
+        occasion: selectedOccasion
       }
     })
 
@@ -185,30 +168,6 @@ export default function ShopPage() {
               </div>
 
               <div className="space-y-4">
-                {/* Style Selection */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Style
-                  </label>
-                  <div className="grid grid-cols-1 gap-2">
-                    {styles.map((style) => (
-                      <button
-                        key={style.name}
-                        onClick={() => setSelectedStyle(style.name)}
-                        className={`p-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                          selectedStyle === style.name
-                            ? 'border-pink-500 bg-pink-50 text-pink-700'
-                            : 'border-gray-200 hover:border-pink-300'
-                        }`}
-                      >
-                        <div className="flex justify-between items-center">
-                          <span>{style.name}</span>
-                          {style.price > 0 && <span>+£{style.price}</span>}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
 
                 {/* Occasion Selection */}
                 <div>
@@ -245,19 +204,6 @@ export default function ShopPage() {
                   </div>
                 </div>
 
-                {/* Delivery Date */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Delivery Date *
-                  </label>
-                  <input
-                    type="date"
-                    min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
-                    value={deliveryDate}
-                    onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-                  />
-                </div>
 
                 {/* Quantity */}
                 <div>

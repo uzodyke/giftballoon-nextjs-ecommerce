@@ -16,7 +16,6 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [selectedOptions, setSelectedOptions] = useState<{
     balloonType?: string
     customMessage?: string
-    deliveryDate?: string
   }>({})
   const [quantity, setQuantity] = useState(1)
 
@@ -37,10 +36,6 @@ export default function ProductCard({ product }: ProductCardProps) {
     // Validate required fields
     if (!selectedOptions.balloonType && product.options?.styles) {
       alert('Please select a balloon type')
-      return
-    }
-    if (!selectedOptions.deliveryDate) {
-      alert('Please select a delivery date')
       return
     }
 
@@ -136,19 +131,6 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           </div>
 
-          {/* Delivery Date */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Delivery Date
-            </label>
-            <input
-              type="date"
-              min={new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0]}
-              value={selectedOptions.deliveryDate || ''}
-              onChange={(e) => setSelectedOptions(prev => ({ ...prev, deliveryDate: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-            />
-          </div>
 
           {/* Quantity */}
           <div>
