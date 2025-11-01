@@ -8,7 +8,7 @@ export default function Home() {
   const featuredProducts = [
     products.find(p => p.id === 'luxury-stuffed-balloons'),
     products.find(p => p.id === 'golden-treasure-balloon')
-  ].filter(Boolean)
+  ].filter((product): product is NonNullable<typeof product> => Boolean(product))
 
   return (
     <div>
