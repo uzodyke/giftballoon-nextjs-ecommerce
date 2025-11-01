@@ -9,9 +9,9 @@ export interface CartItem {
   quantity: number
   image: string
   selectedOptions?: {
-    style?: string
-    size?: string
-    color?: string
+    customMessage?: string
+    selectedOccasion?: string
+    balloonType?: string
   }
 }
 
