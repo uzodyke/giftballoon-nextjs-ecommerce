@@ -36,13 +36,13 @@ export default function ImageZoom({ src, alt, width = 300, height = 300, classNa
       {/* Main Image with Zoom Trigger */}
       <div className="relative group cursor-zoom-in" onClick={openZoom}>
         {!imageLoaded && !imageError && (
-          <div className={`bg-gray-200 animate-pulse flex items-center justify-center ${className}`} style={{ width, height }}>
+          <div className={`bg-gray-200 animate-pulse flex items-center justify-center ${className}`}>
             <span className="text-gray-400">Loading...</span>
           </div>
         )}
 
         {imageError && (
-          <div className={`bg-gray-100 flex items-center justify-center ${className}`} style={{ width, height }}>
+          <div className={`bg-gray-100 flex items-center justify-center ${className}`}>
             <span className="text-gray-500 text-sm">Image not found</span>
           </div>
         )}
@@ -50,10 +50,7 @@ export default function ImageZoom({ src, alt, width = 300, height = 300, classNa
         <img
           src={src}
           alt={alt}
-          width={width}
-          height={height}
           className={`transition-transform duration-300 hover:scale-105 ${className} ${!imageLoaded ? 'opacity-0' : 'opacity-100'}`}
-          style={{ width: 'auto', height: 'auto' }}
           onLoad={handleImageLoad}
           onError={handleImageError}
         />

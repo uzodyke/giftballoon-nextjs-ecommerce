@@ -34,12 +34,6 @@ export default function Home() {
                 >
                   Shop Now
                 </Link>
-                <Link
-                  href="/services"
-                  className="border-2 border-pink-600 text-pink-600 px-8 py-4 rounded-lg font-semibold hover:bg-pink-600 hover:text-white transition-colors text-center"
-                >
-                  Our Services
-                </Link>
               </div>
               <div className="flex items-center mt-8 space-x-6">
                 <div className="flex items-center">
@@ -64,7 +58,6 @@ export default function Home() {
                   height={400}
                   className="w-full h-auto rounded-xl"
                 />
-                <p className="text-gray-700">Beautiful balloon arrangements coming soon!</p>
               </div>
             </div>
           </div>
