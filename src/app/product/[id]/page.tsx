@@ -15,10 +15,6 @@ export default function ProductDetailPage() {
 
   const product = getProductById(productId)
 
-  const [selectedOptions, setSelectedOptions] = useState<{
-    message?: string
-    occasion?: string
-  }>({})
   const [customMessage, setCustomMessage] = useState('')
   const [selectedOccasion, setSelectedOccasion] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -89,8 +85,8 @@ export default function ProductDetailPage() {
       quantity,
       image: product.image,
       selectedOptions: {
-        message: customMessage,
-        occasion: selectedOccasion
+        customMessage,
+        selectedOccasion
       }
     })
 
@@ -109,8 +105,8 @@ export default function ProductDetailPage() {
       quantity,
       image: product.image,
       selectedOptions: {
-        message: customMessage,
-        occasion: selectedOccasion
+        customMessage,
+        selectedOccasion
       }
     })
 
