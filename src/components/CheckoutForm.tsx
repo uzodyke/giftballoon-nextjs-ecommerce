@@ -157,7 +157,7 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
             value={customerDetails.phone}
             onChange={(e) => handleInputChange('phone', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
-            placeholder="+44 20 1234 5678"
+            placeholder="07459665002"
           />
         </div>
 
@@ -249,6 +249,20 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
               },
               fields: {
                 billingDetails: 'auto'
+              },
+              defaultValues: {
+                billingDetails: {
+                  name: customerDetails.name,
+                  email: customerDetails.email,
+                  phone: customerDetails.phone,
+                  address: {
+                    line1: customerDetails.address.line1,
+                    line2: customerDetails.address.line2,
+                    city: customerDetails.address.city,
+                    postal_code: customerDetails.address.postal_code,
+                    country: customerDetails.address.country
+                  }
+                }
               }
             }}
           />
