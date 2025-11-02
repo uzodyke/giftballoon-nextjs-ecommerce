@@ -46,7 +46,6 @@ export async function POST(request: NextRequest) {
         enabled: true,
         allow_redirects: 'always'
       },
-      payment_method_types: ['card', 'apple_pay', 'google_pay', 'link'],
       description: `GiftBalloon Order ${orderId}`,
       receipt_email: orderDetails?.customerEmail,
     })
