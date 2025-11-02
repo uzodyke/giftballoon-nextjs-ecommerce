@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <Link href="/services" className="text-gray-700 hover:text-pink-600 transition-colors">
                 Services
               </Link>
-              <Link href="/locations" className="text-gray-700 hover:text-pink-600 transition-colors">
+              <Link href="/location" className="text-gray-700 hover:text-pink-600 transition-colors">
                 Locations
               </Link>
               <Link href="/about" className="text-gray-700 hover:text-pink-600 transition-colors">
@@ -78,7 +78,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link href="/services" className="px-2 py-2 text-gray-700 hover:text-pink-600 transition-colors">
                   Services
                 </Link>
-                <Link href="/locations" className="px-2 py-2 text-gray-700 hover:text-pink-600 transition-colors">
+                <Link href="/location" className="px-2 py-2 text-gray-700 hover:text-pink-600 transition-colors">
                   Locations
                 </Link>
                 <Link href="/about" className="px-2 py-2 text-gray-700 hover:text-pink-600 transition-colors">
@@ -111,7 +111,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="/shop" className="hover:text-white transition-colors">Shop</Link></li>
                 <li><Link href="/services" className="hover:text-white transition-colors">Services</Link></li>
-                <li><Link href="/locations" className="hover:text-white transition-colors">Locations</Link></li>
+                <li><Link href="/location" className="hover:text-white transition-colors">Locations</Link></li>
                 <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
               </ul>
             </div>

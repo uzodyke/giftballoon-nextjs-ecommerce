@@ -27,43 +27,66 @@ export default function CheckoutPage() {
       return
     }
 
-    // Create payment intent
+    // Create payment intent with enhanced error handling
     const createPaymentIntent = async () => {
       try {
         setLoading(true)
         setError('')
+
+        // Validate cart before proceeding
+        if (!cartItems || cartItems.length === 0) {
+          throw new Error('Cart is empty')
+        }
+
+        if (!total || total <= 0) {
+          throw new Error('Invalid order total')
+        }
+
+        const requestBody = {
+          amount: total,
+          currency: 'gbp',
+          orderDetails: {
+            items: cartItems.map(item => ({
+              id: item.id || 'unknown',
+              name: item.name || 'Unknown Item',
+              price: item.price || 0,
+              quantity: item.quantity || 1,
+              selectedOptions: item.selectedOptions || {}
+            })),
+            subtotal,
+            deliveryFee,
+            total
+          }
+        }
 
         const response = await fetch('/api/create-payment-intent', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            amount: total,
-            currency: 'gbp',
-            orderDetails: {
-              items: cartItems.map(item => ({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity,
-                selectedOptions: item.selectedOptions
-              })),
-              subtotal,
-              deliveryFee,
-              total
-            }
-          }),
+          body: JSON.stringify(requestBody),
         })
 
         if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.error || 'Failed to create payment intent')
+          let errorMessage = 'Failed to create payment intent'
+          try {
+            const errorData = await response.json()
+            errorMessage = errorData.error || errorMessage
+          } catch (parseError) {
+            console.error('Error parsing error response:', parseError)
+          }
+          throw new Error(errorMessage)
         }
 
         const data = await response.json()
+
+        // Validate response data
+        if (!data.clientSecret) {
+          throw new Error('Invalid response: missing client secret')
+        }
+
         setClientSecret(data.clientSecret)
-        setOrderId(data.orderId)
+        setOrderId(data.orderId || 'unknown')
       } catch (err) {
         console.error('Payment intent creation error:', err)
         setError(err instanceof Error ? err.message : 'Failed to initialize payment')
