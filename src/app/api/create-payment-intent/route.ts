@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
+interface OrderItem {
+  id: string
+  name: string
+  price: number
+  quantity: number
+  selectedOptions?: Record<string, any>
+}
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-09-30.clover',
 })
@@ -52,8 +60,8 @@ export async function POST(request: NextRequest) {
         customerEmail: orderDetails?.customerEmail || 'guest@giftballoon.com',
         customerName: orderDetails?.customerName || 'Guest Customer',
         itemCount: (orderDetails?.items || []).length.toString(),
-        itemSummary: (orderDetails?.items || [])
-          .map(item => `${item.name} (x${item.quantity})`)
+        itemSummary: (orderDetails?.items as OrderItem[] || [])
+          .map((item: OrderItem) => `${item.name} (x${item.quantity})`)
           .join(', ')
           .substring(0, 400) // Keep under 500 char limit
       },
