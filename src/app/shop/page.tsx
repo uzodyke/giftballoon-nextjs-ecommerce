@@ -58,8 +58,8 @@ export default function ShopPage() {
       quantity,
       image: selectedProduct.image,
       selectedOptions: {
-        message: customMessage,
-        occasion: selectedOccasion
+        customMessage: customMessage,
+        selectedOccasion: selectedOccasion
       }
     })
 
@@ -78,8 +78,8 @@ export default function ShopPage() {
       quantity,
       image: selectedProduct.image,
       selectedOptions: {
-        message: customMessage,
-        occasion: selectedOccasion
+        customMessage: customMessage,
+        selectedOccasion: selectedOccasion
       }
     })
 

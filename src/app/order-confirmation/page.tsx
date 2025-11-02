@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, Package, Clock, Mail, Phone } from 'lucide-react'
 
-export default function OrderConfirmationPage() {
+function OrderConfirmationContent() {
   const searchParams = useSearchParams()
   const orderId = searchParams.get('order_id')
   const paymentIntentId = searchParams.get('payment_intent')
@@ -151,7 +151,7 @@ export default function OrderConfirmationPage() {
               <Phone className="w-5 h-5 text-pink-600 mt-0.5" />
               <div>
                 <p className="font-medium text-gray-900">Phone Support</p>
-                <p className="text-sm text-gray-600">(555) 123-4567</p>
+                <p className="text-sm text-gray-600">07459665002</p>
                 <p className="text-xs text-gray-500">Mon-Sat 9AM-6PM</p>
               </div>
             </div>
@@ -183,5 +183,25 @@ export default function OrderConfirmationPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function OrderConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-6">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600"></div>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Loading Order Details...</h1>
+            <p className="text-gray-600">Please wait while we retrieve your order information.</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <OrderConfirmationContent />
+    </Suspense>
   )
 }
