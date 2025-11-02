@@ -51,7 +51,11 @@ export async function POST(request: NextRequest) {
         orderId,
         customerEmail: orderDetails?.customerEmail || 'guest@giftballoon.com',
         customerName: orderDetails?.customerName || 'Guest Customer',
-        items: JSON.stringify(orderDetails?.items || [])
+        itemCount: (orderDetails?.items || []).length.toString(),
+        itemSummary: (orderDetails?.items || [])
+          .map(item => `${item.name} (x${item.quantity})`)
+          .join(', ')
+          .substring(0, 400) // Keep under 500 char limit
       },
       automatic_payment_methods: {
         enabled: true,
