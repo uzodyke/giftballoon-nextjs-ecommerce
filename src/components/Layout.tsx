@@ -128,7 +128,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <h4 className="font-semibold mb-4">Contact Info</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>Phone: 07459665002</li>
-                <li>Email: info@giftedballoon.com</li>
+                <li>Email: tigrexmove@gmail.com</li>
                 <li>Mon-Sat: 9AM-6PM</li>
                 <li>Sunday: 10AM-4PM</li>
               </ul>

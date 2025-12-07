@@ -47,7 +47,7 @@ export default function Location() {
                 <Mail className="w-6 h-6 text-pink-600 mt-1" />
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                  <p className="text-gray-600">info@giftedballoon.com</p>
+                  <p className="text-gray-600">tigrexmove@gmail.com</p>
                 </div>
               </div>
 
