@@ -39,7 +39,7 @@ export default function Contact() {
                 <Mail className="w-6 h-6 text-pink-600 mt-1" />
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                  <p className="text-gray-600">hello@giftballoon.co.uk</p>
+                  <p className="text-gray-600">info@giftedballoon.com</p>
                   <p className="text-sm text-gray-500">We'll respond within 24 hours</p>
                 </div>
               </div>
@@ -190,7 +190,7 @@ export default function Contact() {
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Email Us</h3>
               <p className="text-gray-600 mb-4">Send us your detailed requirements</p>
               <a
-                href="mailto:hello@giftballoon.co.uk"
+                href="mailto:info@giftedballoon.com"
                 className="bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition-colors inline-block"
               >
                 Send Email

@@ -142,7 +142,7 @@ function OrderConfirmationContent() {
               <Mail className="w-5 h-5 text-pink-600 mt-0.5" />
               <div>
                 <p className="font-medium text-gray-900">Email Support</p>
-                <p className="text-sm text-gray-600">info@giftballoon.com</p>
+                <p className="text-sm text-gray-600">info@giftedballoon.com</p>
                 <p className="text-xs text-gray-500">We'll respond within 24 hours</p>
               </div>
             </div>

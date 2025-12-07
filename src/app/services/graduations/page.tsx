@@ -330,7 +330,7 @@ export default function GraduationsPage() {
             </div>
             <div className="flex items-center">
               <Mail className="w-5 h-5 mr-2" />
-              <span>info@giftballoon.com</span>
+              <span>info@giftedballoon.com</span>
             </div>
           </div>
 
