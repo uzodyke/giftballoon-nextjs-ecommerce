@@ -29,7 +29,8 @@ export default function Location() {
                   <h3 className="text-lg font-semibold text-gray-900">Address</h3>
                   <p className="text-gray-600">
                     GiftBalloon Studio<br />
-                    United Kingdom
+                    Serving Major UK Cities<br />
+                    London • Manchester • Birmingham • Edinburgh • Cardiff
                   </p>
                 </div>
               </div>
@@ -46,7 +47,7 @@ export default function Location() {
                 <Mail className="w-6 h-6 text-pink-600 mt-1" />
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">Email</h3>
-                  <p className="text-gray-600">hello@giftballoon.co.uk</p>
+                  <p className="text-gray-600">info@giftedballoon.com</p>
                 </div>
               </div>
 
@@ -71,7 +72,7 @@ export default function Location() {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">We Deliver Throughout the UK</h3>
               <p className="text-gray-600 mb-4">
-                We offer nationwide delivery services across England, Scotland, Wales, and Northern Ireland. Same-day delivery available in select areas for orders placed before 2 PM.
+                We offer nationwide delivery services across England, Scotland, Wales, and Northern Ireland. Same-day delivery available in major cities including London, Manchester, Birmingham, Edinburgh, and Cardiff for orders placed before 2 PM.
               </p>
 
               <div className="space-y-3">
@@ -100,7 +101,7 @@ export default function Location() {
             <div className="bg-pink-50 rounded-lg p-6 mt-6">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">Same-Day & Rush Delivery</h3>
               <p className="text-gray-600 mb-4">
-                Need your balloons urgently? We offer same-day delivery in London and major UK cities for orders placed before 2 PM.
+                Need your balloons urgently? We offer same-day delivery in major UK cities including London, Manchester, Birmingham, Edinburgh, Cardiff, Glasgow, Liverpool, and Bristol for orders placed before 2 PM.
               </p>
               <p className="text-gray-600">
                 For special occasions or remote locations, contact us at 07459665002 and we'll arrange the perfect delivery solution for your event.
