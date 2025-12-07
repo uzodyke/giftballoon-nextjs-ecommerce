@@ -127,8 +127,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div>
               <h4 className="font-semibold mb-4">Contact Info</h4>
               <ul className="space-y-2 text-gray-400">
-                <li>Phone: (555) 123-4567</li>
-                <li>Email: info@giftballoon.com</li>
+                <li>Phone: 07459665002</li>
+                <li>Email: hello@giftballoon.co.uk</li>
                 <li>Mon-Sat: 9AM-6PM</li>
                 <li>Sunday: 10AM-4PM</li>
               </ul>
