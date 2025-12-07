@@ -10,7 +10,7 @@ export default function Location() {
             Our Location
           </h1>
           <p className="text-xl text-center text-pink-100">
-            Visit us or let us deliver to you
+            Serving customers across the entire UK
           </p>
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function Location() {
                   <h3 className="text-lg font-semibold text-gray-900">Address</h3>
                   <p className="text-gray-600">
                     GiftBalloon Studio<br />
-                    London, UK
+                    United Kingdom
                   </p>
                 </div>
               </div>
@@ -66,36 +66,44 @@ export default function Location() {
 
           {/* Delivery Info */}
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Delivery Areas</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">UK-Wide Delivery</h2>
 
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">We Deliver Throughout London</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">We Deliver Throughout the UK</h3>
               <p className="text-gray-600 mb-4">
-                We offer delivery services across London and surrounding areas. Same-day delivery available for orders placed before 2 PM.
+                We offer nationwide delivery services across England, Scotland, Wales, and Northern Ireland. Same-day delivery available in select areas for orders placed before 2 PM.
               </p>
 
               <div className="space-y-3">
                 <div>
-                  <h4 className="font-semibold text-gray-900">Free Delivery Zones:</h4>
-                  <p className="text-gray-600">Central London, Zone 1-2</p>
+                  <h4 className="font-semibold text-gray-900">Free Delivery:</h4>
+                  <p className="text-gray-600">Orders over £50 - anywhere in the UK</p>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900">Standard Delivery (£5):</h4>
-                  <p className="text-gray-600">Zone 3-4, Greater London</p>
+                  <h4 className="font-semibold text-gray-900">Standard Delivery (£5.99):</h4>
+                  <p className="text-gray-600">England & Wales (2-3 business days)</p>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900">Extended Delivery (£10):</h4>
-                  <p className="text-gray-600">Zone 5-6, Outer London</p>
+                  <h4 className="font-semibold text-gray-900">Scotland & Northern Ireland (£7.99):</h4>
+                  <p className="text-gray-600">3-5 business days</p>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-gray-900">Express Delivery (£12.99):</h4>
+                  <p className="text-gray-600">Next day delivery to most UK mainland addresses</p>
                 </div>
               </div>
             </div>
 
             <div className="bg-pink-50 rounded-lg p-6 mt-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Special Arrangements</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Same-Day & Rush Delivery</h3>
+              <p className="text-gray-600 mb-4">
+                Need your balloons urgently? We offer same-day delivery in London and major UK cities for orders placed before 2 PM.
+              </p>
               <p className="text-gray-600">
-                Need delivery outside our standard areas? Contact us at 07459665002 and we'll work out a special arrangement for your event.
+                For special occasions or remote locations, contact us at 07459665002 and we'll arrange the perfect delivery solution for your event.
               </p>
             </div>
           </div>
