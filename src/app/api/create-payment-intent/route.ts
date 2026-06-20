@@ -51,19 +51,32 @@ export async function POST(request: NextRequest) {
     // Generate order ID
     const orderId = `GB-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`
 
+    // Persist the cart line-items in the PaymentIntent metadata so the webhook
+    // can reconstruct the full order after payment. Stripe caps each metadata
+    // value at 500 chars, so the items JSON is split across items_0, items_1…
+    const items = (orderDetails?.items as OrderItem[]) || []
+    const itemsJson = JSON.stringify(items)
+    const itemChunks: Record<string, string> = {}
+    for (let i = 0; i * 450 < itemsJson.length; i++) {
+      itemChunks[`items_${i}`] = itemsJson.slice(i * 450, (i + 1) * 450)
+    }
+
     // Create Stripe payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount * 100), // Convert to pence
       currency,
       metadata: {
         orderId,
-        customerEmail: orderDetails?.customerEmail || 'guest@giftballoon.com',
-        customerName: orderDetails?.customerName || 'Guest Customer',
-        itemCount: (orderDetails?.items || []).length.toString(),
-        itemSummary: (orderDetails?.items as OrderItem[] || [])
+        itemCount: items.length.toString(),
+        itemSummary: items
           .map((item: OrderItem) => `${item.name} (x${item.quantity})`)
           .join(', ')
-          .substring(0, 400) // Keep under 500 char limit
+          .substring(0, 400), // Keep under 500 char limit
+        subtotal: String(orderDetails?.subtotal ?? ''),
+        deliveryFee: String(orderDetails?.deliveryFee ?? ''),
+        total: String(orderDetails?.total ?? amount),
+        currency,
+        ...itemChunks,
       },
       automatic_payment_methods: {
         enabled: true,

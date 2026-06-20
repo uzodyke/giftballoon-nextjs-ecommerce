@@ -3,31 +3,36 @@
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircle, Package, Clock, Mail, Phone } from 'lucide-react'
+import { CheckCircle, Package, Clock, Mail, Phone, Truck } from 'lucide-react'
+import type { Order } from '@/lib/types'
 
 function OrderConfirmationContent() {
   const searchParams = useSearchParams()
   const orderId = searchParams.get('order_id')
-  const paymentIntentId = searchParams.get('payment_intent')
+  const clientSecret = searchParams.get('payment_intent_client_secret')
 
-  const [orderDetails, setOrderDetails] = useState({
-    orderId: orderId || '',
-    status: 'confirmed',
-    estimatedDelivery: '3-5 business days',
-    total: 0
-  })
+  const [order, setOrder] = useState<Order | null>(null)
+
+  const estimatedDelivery = '3-5 business days'
 
   useEffect(() => {
-    // In a real app, you'd fetch order details from your backend here
-    // For now, we'll simulate the order details
-    if (orderId) {
-      setOrderDetails(prev => ({
-        ...prev,
-        orderId,
-        total: 89.98 // This would come from your backend
-      }))
+    if (!orderId || !clientSecret) return
+
+    const fetchOrder = async () => {
+      try {
+        const res = await fetch(
+          `/api/orders/${encodeURIComponent(orderId)}?cs=${encodeURIComponent(clientSecret)}`
+        )
+        if (res.ok) {
+          setOrder(await res.json())
+        }
+      } catch (err) {
+        console.error('Failed to load order:', err)
+      }
     }
-  }, [orderId])
+
+    fetchOrder()
+  }, [orderId, clientSecret])
 
   if (!orderId) {
     return (
@@ -66,9 +71,59 @@ function OrderConfirmationContent() {
             Thank you for your purchase. Your order has been received and is being processed.
           </p>
           <p className="text-lg text-gray-600">
-            Order #<span className="font-mono font-semibold">{orderDetails.orderId}</span>
+            Order #<span className="font-mono font-semibold">{orderId}</span>
           </p>
         </div>
+
+        {/* Order Summary + Delivery */}
+        {order && order.items && order.items.length > 0 && (
+          <div className="bg-white rounded-xl shadow-md p-8 mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Summary</h3>
+            <div className="space-y-3 mb-4">
+              {order.items.map((item, index) => (
+                <div key={`${item.id}-${index}`} className="flex justify-between text-sm">
+                  <span className="text-gray-700">
+                    {item.name} <span className="text-gray-500">× {item.quantity}</span>
+                  </span>
+                  <span className="font-medium text-gray-900">
+                    £{(item.price * item.quantity).toFixed(2)}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="border-t pt-3 space-y-1 text-sm">
+              <div className="flex justify-between text-gray-600">
+                <span>Subtotal</span>
+                <span>£{order.subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Delivery</span>
+                <span>{order.deliveryFee === 0 ? 'FREE' : `£${order.deliveryFee.toFixed(2)}`}</span>
+              </div>
+              <div className="flex justify-between text-base font-semibold text-gray-900 border-t pt-2">
+                <span>Total</span>
+                <span>£{order.total.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {order.deliveryAddress && order.deliveryAddress.line1 && (
+              <div className="border-t mt-4 pt-4">
+                <h4 className="font-medium text-gray-900 flex items-center gap-2 mb-2">
+                  <Truck className="w-4 h-4" />
+                  Delivering to
+                </h4>
+                <address className="text-sm text-gray-600 not-italic leading-relaxed">
+                  {order.customer?.name && <div>{order.customer.name}</div>}
+                  <div>{order.deliveryAddress.line1}</div>
+                  {order.deliveryAddress.line2 && <div>{order.deliveryAddress.line2}</div>}
+                  <div>
+                    {order.deliveryAddress.city}, {order.deliveryAddress.postal_code}
+                  </div>
+                </address>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Order Details Card */}
         <div className="bg-white rounded-xl shadow-md p-8 mb-8">
@@ -86,7 +141,7 @@ function OrderConfirmationContent() {
                 <Clock className="w-6 h-6 text-yellow-600" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-1">Delivery</h3>
-              <p className="text-sm text-gray-600">{orderDetails.estimatedDelivery}</p>
+              <p className="text-sm text-gray-600">{estimatedDelivery}</p>
             </div>
 
             <div className="text-center">
@@ -127,7 +182,7 @@ function OrderConfirmationContent() {
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">Delivery</p>
-                  <p className="text-sm text-gray-600">Your order will be delivered within {orderDetails.estimatedDelivery}</p>
+                  <p className="text-sm text-gray-600">Your order will be delivered within {estimatedDelivery}</p>
                 </div>
               </div>
             </div>
@@ -178,7 +233,7 @@ function OrderConfirmationContent() {
         <div className="mt-12 text-center text-sm text-gray-500">
           <p>
             Questions about your order? Reference your order number:{' '}
-            <span className="font-mono font-semibold text-gray-700">{orderDetails.orderId}</span>
+            <span className="font-mono font-semibold text-gray-700">{orderId}</span>
           </p>
         </div>
       </div>
