@@ -8,7 +8,15 @@ import {
   useElements
 } from '@stripe/react-stripe-js'
 import { useCart } from '@/context/CartContext'
-import { Loader2, Lock, CreditCard } from 'lucide-react'
+import { Loader2, Lock, CreditCard, Truck } from 'lucide-react'
+
+const emptyAddress = {
+  line1: '',
+  line2: '',
+  city: '',
+  postal_code: '',
+  country: 'GB',
+}
 
 interface CheckoutFormProps {
   clientSecret: string
@@ -28,14 +36,10 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
     name: '',
     email: '',
     phone: '',
-    address: {
-      line1: '',
-      line2: '',
-      city: '',
-      postal_code: '',
-      country: 'GB'
-    }
+    address: { ...emptyAddress }
   })
+  const [deliverySameAsBilling, setDeliverySameAsBilling] = useState(true)
+  const [deliveryAddress, setDeliveryAddress] = useState({ ...emptyAddress })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -55,6 +59,13 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
         throw new Error(submitError.message)
       }
 
+      // The address the order actually ships to. When "same as billing" is
+      // ticked we send the billing address as the delivery address so the
+      // webhook always has a shipping address to persist.
+      const shippingAddress = deliverySameAsBilling
+        ? customerDetails.address
+        : deliveryAddress
+
       const { error: confirmError } = await stripe.confirmPayment({
         elements,
         clientSecret,
@@ -67,6 +78,17 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
               phone: customerDetails.phone,
               address: customerDetails.address
             }
+          },
+          shipping: {
+            name: customerDetails.name,
+            phone: customerDetails.phone,
+            address: {
+              line1: shippingAddress.line1,
+              line2: shippingAddress.line2,
+              city: shippingAddress.city,
+              postal_code: shippingAddress.postal_code,
+              country: shippingAddress.country
+            }
           }
         },
         redirect: 'if_required'
@@ -78,7 +100,9 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
 
       // Payment succeeded
       clearCart()
-      router.push(`/order-confirmation?order_id=${orderId}&payment_intent=${clientSecret}`)
+      router.push(
+        `/order-confirmation?order_id=${orderId}&payment_intent_client_secret=${encodeURIComponent(clientSecret)}`
+      )
 
     } catch (err) {
       console.error('Payment error:', err)
@@ -104,6 +128,13 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
         [field]: value
       }))
     }
+  }
+
+  const handleDeliveryChange = (field: string, value: string) => {
+    setDeliveryAddress(prev => ({
+      ...prev,
+      [field]: value
+    }))
   }
 
   return (
@@ -225,6 +256,91 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Delivery Address */}
+      <div className="space-y-4">
+        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+          <Truck className="w-5 h-5" />
+          Delivery Address
+        </h3>
+
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            checked={deliverySameAsBilling}
+            onChange={(e) => setDeliverySameAsBilling(e.target.checked)}
+            className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+          />
+          <span className="text-sm text-gray-700">
+            Deliver to my billing address
+          </span>
+        </label>
+
+        {!deliverySameAsBilling && (
+          <div className="space-y-3">
+            <div>
+              <label htmlFor="delivery_line1" className="block text-sm font-medium text-gray-700 mb-1">
+                Address Line 1 *
+              </label>
+              <input
+                type="text"
+                id="delivery_line1"
+                required
+                value={deliveryAddress.line1}
+                onChange={(e) => handleDeliveryChange('line1', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                placeholder="123 Main Street"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="delivery_line2" className="block text-sm font-medium text-gray-700 mb-1">
+                Address Line 2
+              </label>
+              <input
+                type="text"
+                id="delivery_line2"
+                value={deliveryAddress.line2}
+                onChange={(e) => handleDeliveryChange('line2', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                placeholder="Apartment, suite, etc."
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="delivery_city" className="block text-sm font-medium text-gray-700 mb-1">
+                  City *
+                </label>
+                <input
+                  type="text"
+                  id="delivery_city"
+                  required
+                  value={deliveryAddress.city}
+                  onChange={(e) => handleDeliveryChange('city', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                  placeholder="London"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="delivery_postal_code" className="block text-sm font-medium text-gray-700 mb-1">
+                  Postal Code *
+                </label>
+                <input
+                  type="text"
+                  id="delivery_postal_code"
+                  required
+                  value={deliveryAddress.postal_code}
+                  onChange={(e) => handleDeliveryChange('postal_code', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                  placeholder="SW1A 1AA"
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Payment Element */}

@@ -21,12 +21,11 @@ export default function CheckoutPage() {
   const { deliveryFee, total } = calculateOrderTotal(subtotal)
 
   useEffect(() => {
-    // Allow checkout even with empty cart for demo purposes in production
-    // Comment out redirect to test Stripe Elements
-    // if (cartItems.length === 0) {
-    //   router.push('/cart')
-    //   return
-    // }
+    // No items, nothing to pay for — send the customer back to their cart.
+    if (cartItems.length === 0) {
+      router.push('/cart')
+      return
+    }
 
     // Create payment intent with enhanced error handling
     const createPaymentIntent = async () => {
@@ -34,35 +33,20 @@ export default function CheckoutPage() {
         setLoading(true)
         setError('')
 
-        // Use demo values if cart is empty (for testing Stripe Elements)
-        const finalCartItems = cartItems.length > 0 ? cartItems : [
-          {
-            id: 'demo-balloon',
-            name: 'Demo Heart Balloon',
-            price: 25.00,
-            quantity: 1,
-            image: '/images/heart-balloon.jpg',
-            selectedOptions: { customMessage: 'Test', selectedOccasion: 'Demo' }
-          }
-        ]
-
-        const finalTotal = total > 0 ? total : 25.00
-        const finalSubtotal = subtotal > 0 ? subtotal : 25.00
-
         const requestBody = {
-          amount: finalTotal,
+          amount: total,
           currency: 'gbp',
           orderDetails: {
-            items: finalCartItems.map(item => ({
+            items: cartItems.map(item => ({
               id: item.id || 'unknown',
               name: item.name || 'Unknown Item',
               price: item.price || 0,
               quantity: item.quantity || 1,
               selectedOptions: item.selectedOptions || {}
             })),
-            subtotal: finalSubtotal,
+            subtotal,
             deliveryFee,
-            total: finalTotal
+            total
           }
         }
 
@@ -104,9 +88,6 @@ export default function CheckoutPage() {
 
     createPaymentIntent()
   }, [cartItems, total, subtotal, deliveryFee, router])
-
-  // Show notice if cart is empty but allow checkout for demo purposes
-  const showEmptyCartNotice = cartItems.length === 0
 
   if (loading) {
     return (
@@ -160,16 +141,6 @@ export default function CheckoutPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Checkout</h1>
           <p className="text-gray-600">Complete your order securely with Stripe</p>
-          {showEmptyCartNotice && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-yellow-800">
-                <strong>Demo Mode:</strong> Your cart is empty. This is a demo checkout showing how Stripe Elements work.{' '}
-                <Link href="/shop" className="underline hover:text-yellow-900">
-                  Add items to cart
-                </Link> for a real checkout experience.
-              </p>
-            </div>
-          )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -178,15 +149,7 @@ export default function CheckoutPage() {
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Summary</h2>
 
             <div className="space-y-4 mb-6">
-              {(cartItems.length > 0 ? cartItems : [
-                {
-                  id: 'demo-balloon',
-                  name: 'Demo Heart Balloon',
-                  price: 25.00,
-                  quantity: 1,
-                  selectedOptions: { customMessage: 'Test Message', selectedOccasion: 'Demo' }
-                }
-              ]).map((item, index) => (
+              {cartItems.map((item, index) => (
                 <div key={`${item.id}-${index}`} className="flex justify-between">
                   <div className="flex-1">
                     <h3 className="font-medium text-gray-900">{item.name}</h3>
@@ -213,7 +176,7 @@ export default function CheckoutPage() {
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between text-gray-600">
                 <span>Subtotal</span>
-                <span>£{(subtotal > 0 ? subtotal : 25.00).toFixed(2)}</span>
+                <span>£{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Delivery</span>
@@ -227,7 +190,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-lg font-semibold text-gray-900 border-t pt-2">
                 <span>Total</span>
-                <span>£{(total > 0 ? total : 25.00).toFixed(2)}</span>
+                <span>£{total.toFixed(2)}</span>
               </div>
             </div>
 
