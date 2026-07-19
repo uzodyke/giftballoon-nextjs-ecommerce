@@ -39,6 +39,7 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
     address: { ...emptyAddress }
   })
   const [deliverySameAsBilling, setDeliverySameAsBilling] = useState(true)
+  const [recipientName, setRecipientName] = useState('')
   const [deliveryAddress, setDeliveryAddress] = useState({ ...emptyAddress })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,6 +67,12 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
         ? customerDetails.address
         : deliveryAddress
 
+      // When sending to someone else, the parcel is addressed to the recipient;
+      // otherwise it goes to the buyer.
+      const shippingName = deliverySameAsBilling
+        ? customerDetails.name
+        : recipientName.trim() || customerDetails.name
+
       const { error: confirmError } = await stripe.confirmPayment({
         elements,
         clientSecret,
@@ -80,7 +87,7 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
             }
           },
           shipping: {
-            name: customerDetails.name,
+            name: shippingName,
             phone: customerDetails.phone,
             address: {
               line1: shippingAddress.line1,
@@ -279,6 +286,21 @@ export default function CheckoutForm({ clientSecret, orderId, total }: CheckoutF
 
         {!deliverySameAsBilling && (
           <div className="space-y-3">
+            <div>
+              <label htmlFor="recipient_name" className="block text-sm font-medium text-gray-700 mb-1">
+                Recipient&apos;s Full Name *
+              </label>
+              <input
+                type="text"
+                id="recipient_name"
+                required
+                value={recipientName}
+                onChange={(e) => setRecipientName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                placeholder="Who is receiving this gift?"
+              />
+            </div>
+
             <div>
               <label htmlFor="delivery_line1" className="block text-sm font-medium text-gray-700 mb-1">
                 Address Line 1 *

@@ -18,20 +18,41 @@ function OrderConfirmationContent() {
   useEffect(() => {
     if (!orderId || !clientSecret) return
 
-    const fetchOrder = async () => {
+    // The order is written asynchronously by the Stripe webhook, which usually
+    // lands a few seconds after this page loads. Poll until it appears (the API
+    // returns 202 "processing" until then) rather than giving up on first try.
+    let cancelled = false
+    const maxAttempts = 12 // ~24s at 2s intervals
+
+    const fetchOrder = async (): Promise<boolean> => {
       try {
         const res = await fetch(
           `/api/orders/${encodeURIComponent(orderId)}?cs=${encodeURIComponent(clientSecret)}`
         )
+        // 202 = webhook hasn't persisted the order yet; keep polling.
+        if (res.status === 202) return false
         if (res.ok) {
-          setOrder(await res.json())
+          if (!cancelled) setOrder(await res.json())
+          return true
         }
       } catch (err) {
         console.error('Failed to load order:', err)
       }
+      return false
     }
 
-    fetchOrder()
+    const poll = async () => {
+      for (let attempt = 0; attempt < maxAttempts && !cancelled; attempt++) {
+        if (await fetchOrder()) return
+        await new Promise((resolve) => setTimeout(resolve, 2000))
+      }
+    }
+
+    poll()
+
+    return () => {
+      cancelled = true
+    }
   }, [orderId, clientSecret])
 
   if (!orderId) {
@@ -113,7 +134,9 @@ function OrderConfirmationContent() {
                   Delivering to
                 </h4>
                 <address className="text-sm text-gray-600 not-italic leading-relaxed">
-                  {order.customer?.name && <div>{order.customer.name}</div>}
+                  {(order.deliveryRecipientName || order.customer?.name) && (
+                    <div>{order.deliveryRecipientName || order.customer?.name}</div>
+                  )}
                   <div>{order.deliveryAddress.line1}</div>
                   {order.deliveryAddress.line2 && <div>{order.deliveryAddress.line2}</div>}
                   <div>

@@ -36,6 +36,8 @@ export interface Order {
   billingAddress: Address
   deliveryAddress: Address
   deliverySameAsBilling: boolean
+  // Who the delivery is addressed to; differs from the buyer when sending as a gift.
+  deliveryRecipientName?: string
   items: OrderItem[]
   subtotal: number
   deliveryFee: number
