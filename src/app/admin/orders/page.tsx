@@ -138,6 +138,11 @@ export default async function AdminOrdersPage() {
                       <div className="text-gray-500 italic">Same as billing</div>
                     ) : (
                       <div className="text-gray-600">
+                        {order.deliveryRecipientName && (
+                          <div className="font-medium text-gray-900">
+                            {order.deliveryRecipientName}
+                          </div>
+                        )}
                         {formatAddress(order.deliveryAddress)}
                       </div>
                     )}

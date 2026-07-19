@@ -106,6 +106,7 @@ export async function POST(request: NextRequest) {
       billingAddress,
       deliveryAddress,
       deliverySameAsBilling,
+      deliveryRecipientName: pi.shipping?.name ?? '',
       items: parseItems(pi.metadata),
       subtotal: Number(pi.metadata.subtotal) || 0,
       deliveryFee: Number(pi.metadata.deliveryFee) || 0,
