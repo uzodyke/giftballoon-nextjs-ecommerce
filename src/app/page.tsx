@@ -6,7 +6,7 @@ import { products } from '@/data/products'
 export default function Home() {
   // Featured products for hero section
   const featuredProducts = [
-    products.find(p => p.id === 'luxury-stuffed-balloons'),
+    products.find(p => p.id === 'heart-stuffed-balloon'),
     products.find(p => p.id === 'golden-treasure-balloon')
   ].filter((product): product is NonNullable<typeof product> => Boolean(product))
 

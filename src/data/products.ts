@@ -40,30 +40,6 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'luxury-stuffed-balloons',
-    name: 'Luxury Stuffed Balloons',
-    description: 'Premium luxury balloon arrangement with high-end materials and elegant presentation. Perfect for special celebrations.',
-    price: 45.00,
-    image: '/images/luxury-stuffed-balloons-45.jpg',
-    images: [
-      '/images/luxury-stuffed-balloons-45.jpg'
-    ],
-    category: 'Luxury',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Classic Luxury', price: 0 },
-        { name: 'Premium Package', price: 20 },
-        { name: 'VIP Experience', price: 50 }
-      ],
-      sizes: [
-        { name: 'Standard Set', price: 0 },
-        { name: 'Large Display', price: 25 },
-        { name: 'Grand Arrangement', price: 60 }
-      ]
-    }
-  },
-  {
     id: 'rose-charm-balloon',
     name: 'Rose Charm Balloon',
     description: 'Elegant rose-themed balloon with charming details. Perfect for garden parties, romantic dinners, or floral-themed events.',
@@ -234,30 +210,6 @@ export const products: Product[] = [
         { name: 'Multi-Color', price: 8 }
       ]
     }
-  },
-  {
-    id: 'picture-special',
-    name: 'Picture Special',
-    description: 'Customizable balloon arrangement with photo integration. Perfect for personalized gifts, memorials, or special photo moments.',
-    price: 40.00,
-    image: '/images/picture-special-40.jpg',
-    images: [
-      '/images/picture-special-40.jpg'
-    ],
-    category: 'Personalized',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Single Photo', price: 0 },
-        { name: 'Photo Collage', price: 15 },
-        { name: 'Premium Frame', price: 25 }
-      ],
-      sizes: [
-        { name: 'Standard Photo', price: 0 },
-        { name: 'Large Display', price: 12 },
-        { name: 'Poster Size', price: 25 }
-      ]
-    }
   }
 ]
 
@@ -268,8 +220,7 @@ export const categories = [
   'Floral',
   'Kids',
   'Adult',
-  'Modern',
-  'Personalized'
+  'Modern'
 ]
 
 export function getProductById(id: string): Product | undefined {
