@@ -33,8 +33,8 @@ export default function About() {
           </div>
           <div className="bg-pink-50 rounded-lg p-8">
             <img
-              src="/images/love-bouquet-30.jpg"
-              alt="About GiftBalloon"
+              src="/images/golden-elegance-45.png"
+              alt="Golden Elegance Balloon Arrangement"
               className="w-full h-auto rounded-lg shadow-md"
             />
           </div>
