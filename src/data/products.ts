@@ -136,6 +136,54 @@ export const products: Product[] = [
         { name: 'Multi-Color', price: 8 }
       ]
     }
+  },
+  {
+    id: 'golden-elegance',
+    name: 'Golden Elegance',
+    description: 'A refined golden balloon arrangement radiating warmth and sophistication. Perfect for anniversaries, milestone celebrations, and elegant gifting.',
+    price: 45.00,
+    image: '/images/golden-elegance-45.png',
+    images: [
+      '/images/golden-elegance-45.png'
+    ],
+    category: 'Luxury',
+    inStock: true
+  },
+  {
+    id: 'luxury-charm',
+    name: 'Luxury Charm',
+    description: 'A luxurious stuffed balloon with charming premium detailing. A standout gift for those who appreciate the finer touches.',
+    price: 45.00,
+    image: '/images/luxury-charm-45.png',
+    images: [
+      '/images/luxury-charm-45.png'
+    ],
+    category: 'Luxury',
+    inStock: true
+  },
+  {
+    id: 'scarlet-elegance',
+    name: 'Scarlet Elegance',
+    description: 'A striking scarlet balloon arrangement full of romance and drama. Ideal for anniversaries, proposals, and Valentine\'s celebrations.',
+    price: 55.00,
+    image: '/images/scarlet-elegance-55.png',
+    images: [
+      '/images/scarlet-elegance-55.png'
+    ],
+    category: 'Romance',
+    inStock: true
+  },
+  {
+    id: 'sweet-celebration',
+    name: 'Sweet Celebration',
+    description: 'A cheerful, colourful balloon arrangement made for happy moments. Perfect for birthdays, congratulations, and every sweet occasion.',
+    price: 45.00,
+    image: '/images/sweet-celebration-45.png',
+    images: [
+      '/images/sweet-celebration-45.png'
+    ],
+    category: 'Romance',
+    inStock: true
   }
 ]
 
