@@ -39,6 +39,78 @@ export default function BlogIndexPage() {
       slug: 'balloon-bouquets',
       category: 'Arrangements',
     },
+    {
+      title: 'Balloon Delivery London: Your Complete Guide to Sending Balloons Across the Capital',
+      description: 'Everything you need to know about balloon delivery in London — delivery areas and postcodes, same-day and scheduled options, and how to order the perfect surprise.',
+      slug: 'balloon-delivery-london',
+      category: 'Delivery',
+    },
+    {
+      title: 'Balloon Arrangements London: Stunning Designs for Every Celebration',
+      description: 'Explore beautiful balloon arrangements in London — bouquets, arches, columns and centrepieces, plus custom designs and setup for events across the capital.',
+      slug: 'balloon-arrangements-london',
+      category: 'Arrangements',
+    },
+    {
+      title: 'Personalised Balloons London: Custom Balloon Gifts Made Personal',
+      description: 'Create custom, personalised balloons in London with names, messages, photos and gifts inside. Perfect bespoke balloon gifts delivered across the city.',
+      slug: 'personalised-balloons-london',
+      category: 'Personalization',
+    },
+    {
+      title: 'Helium Balloon Delivery London: Fresh, Floating Balloons to Your Door',
+      description: 'Pre-inflated helium balloon delivery across London — quality helium, long float times, and balloons that arrive ready to celebrate. Same-day options available.',
+      slug: 'helium-balloon-delivery-london',
+      category: 'Delivery',
+    },
+    {
+      title: 'Same Day Balloon Delivery London: Last-Minute Gifts That Still Wow',
+      description: 'Need balloons today? Discover same day balloon delivery across London — order cut-offs, covered areas, and how to send a stunning last-minute surprise.',
+      slug: 'same-day-balloon-delivery-london',
+      category: 'Delivery',
+    },
+    {
+      title: 'Birthday Balloons London: Make Every Birthday Unforgettable',
+      description: 'Birthday balloon ideas for every age in London — number balloons, themed and personalised designs, plus surprise delivery across the capital.',
+      slug: 'birthday-balloons-london',
+      category: 'Occasions',
+    },
+    {
+      title: 'Wedding Balloon Decorations London: Elegant Displays for Your Big Day',
+      description: 'Sophisticated wedding balloon decorations in London — arches, garlands, backdrops and centrepieces, with on-site setup at venues across the capital.',
+      slug: 'wedding-balloon-decorations-london',
+      category: 'Weddings',
+    },
+    {
+      title: 'Graduation Balloons London: Celebrate Academic Success in Style',
+      description: 'Graduation balloon ideas and delivery in London — caps, year numbers and personalised congratulations, delivered near universities across the city.',
+      slug: 'graduation-balloons-london',
+      category: 'Occasions',
+    },
+    {
+      title: 'Corporate Event Balloons London: Professional Displays That Impress',
+      description: 'Branded, professional balloon displays for corporate events in London — product launches, conferences and openings, with pro delivery and setup.',
+      slug: 'corporate-event-balloons-london',
+      category: 'Corporate',
+    },
+    {
+      title: 'Anniversary & Valentine\'s Balloons London: Romantic Gifts Delivered',
+      description: 'Romantic anniversary and Valentine\'s balloons in London — heart designs, stuffed balloons and personalised love messages, delivered with a surprise.',
+      slug: 'anniversary-valentines-balloons-london',
+      category: 'Romance',
+    },
+    {
+      title: 'Stuffed Balloons London: The Ultimate Surprise-Inside Gift',
+      description: 'Discover stuffed balloons in London — a large balloon with gifts, teddies or confetti sealed inside for an unforgettable reveal, delivered across the city.',
+      slug: 'stuffed-balloons-london',
+      category: 'Gift Ideas',
+    },
+    {
+      title: 'Teddy Balloon Gifts London: Cuddly Surprises Delivered with Love',
+      description: 'Teddy balloon gifts in London — adorable bears paired with or tucked inside balloons, perfect for new babies, birthdays and romance, delivered citywide.',
+      slug: 'teddy-balloon-gift-london',
+      category: 'Gift Ideas',
+    },
   ];
 
   return (
