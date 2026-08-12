@@ -52,8 +52,8 @@ export default function Home() {
             <div className="relative">
               <div className="bg-white rounded-2xl shadow-2xl p-8">
                 <img
-                  src="/images/love-bouquet-30.jpg"
-                  alt="Personalised Love Balloon Bouquet"
+                  src="/images/scarlet-elegance-55.png"
+                  alt="Scarlet Elegance Balloon Arrangement"
                   width={400}
                   height={400}
                   className="w-full h-auto rounded-xl"
