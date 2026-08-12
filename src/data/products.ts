@@ -19,7 +19,7 @@ export const products: Product[] = [
     id: 'heart-stuffed-balloon',
     name: 'Heart Stuffed Balloon',
     description: 'Beautiful heart-shaped balloon perfect for romantic occasions. Filled with surprises and designed to capture hearts.',
-    price: 30.85,
+    price: 65.85,
     image: '/images/heart-stuffed-balloon-30-85.jpg',
     images: [
       '/images/heart-stuffed-balloon-30-85.jpg'
@@ -40,84 +40,10 @@ export const products: Product[] = [
     }
   },
   {
-    id: 'rose-charm-balloon',
-    name: 'Rose Charm Balloon',
-    description: 'Elegant rose-themed balloon with charming details. Perfect for garden parties, romantic dinners, or floral-themed events.',
-    price: 26.00,
-    image: '/images/rose-charm-balloon-26.jpg',
-    images: [
-      '/images/rose-charm-balloon-26.jpg'
-    ],
-    category: 'Floral',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Single Rose', price: 0 },
-        { name: 'Rose Bouquet', price: 10 },
-        { name: 'Premium Rose Garden', price: 20 }
-      ],
-      colors: [
-        { name: 'Classic Red Rose', price: 0 },
-        { name: 'Pink Roses', price: 0 },
-        { name: 'White Roses', price: 0 },
-        { name: 'Mixed Roses', price: 5 }
-      ]
-    }
-  },
-  {
-    id: 'teddy-inside-balloon',
-    name: 'Stuffed Balloon with Teddy Inside',
-    description: 'Surprise balloon with adorable teddy bear inside. Perfect gift for children, birthdays, or anyone who loves cuddly surprises.',
-    price: 35.00,
-    image: '/images/teddy-inside-balloon-35.jpg',
-    images: [
-      '/images/teddy-inside-balloon-35.jpg'
-    ],
-    category: 'Kids',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Standard Teddy', price: 0 },
-        { name: 'Large Teddy', price: 10 },
-        { name: 'Premium Plush', price: 20 }
-      ],
-      colors: [
-        { name: 'Brown Teddy', price: 0 },
-        { name: 'White Teddy', price: 0 },
-        { name: 'Pink Teddy', price: 0 },
-        { name: 'Custom Color', price: 5 }
-      ]
-    }
-  },
-  {
-    id: 'love-bouquet',
-    name: 'Love Bouquet',
-    description: 'Romantic love-themed balloon bouquet perfect for anniversaries, proposals, or expressing your feelings to someone special.',
-    price: 30.00,
-    image: '/images/love-bouquet-30.jpg',
-    images: [
-      '/images/love-bouquet-30.jpg'
-    ],
-    category: 'Romance',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Classic Love', price: 0 },
-        { name: 'Romantic Deluxe', price: 15 },
-        { name: 'Proposal Package', price: 30 }
-      ],
-      sizes: [
-        { name: 'Intimate Bouquet', price: 0 },
-        { name: 'Standard Bouquet', price: 10 },
-        { name: 'Grand Gesture', price: 25 }
-      ]
-    }
-  },
-  {
     id: 'wine-balloon',
     name: 'Stuffed Wine Balloon',
     description: 'Sophisticated balloon arrangement perfect for wine lovers, celebrations, or adult parties. Elegant and mature design.',
-    price: 35.00,
+    price: 70.00,
     image: '/images/wine-balloon-35.jpg',
     images: [
       '/images/wine-balloon-35.jpg'
@@ -141,7 +67,7 @@ export const products: Product[] = [
     id: 'teddy-outside-balloon',
     name: 'Stuffed Balloon with Teddy Outside',
     description: 'Charming balloon with teddy bear attached outside. Perfect for children\'s parties, baby showers, or cute gift presentations.',
-    price: 35.00,
+    price: 70.00,
     image: '/images/teddy-outside-balloon-35.jpg',
     images: [
       '/images/teddy-outside-balloon-35.jpg'
@@ -166,7 +92,7 @@ export const products: Product[] = [
     id: 'golden-treasure-balloon',
     name: 'Golden Treasure Stuffed Balloon',
     description: 'Luxurious golden-themed balloon with treasure elements. Perfect for special celebrations, achievements, or milestone events.',
-    price: 35.00,
+    price: 70.00,
     image: '/images/golden-treasure-balloon-35.jpg',
     images: [
       '/images/golden-treasure-balloon-35.jpg'
@@ -190,7 +116,7 @@ export const products: Product[] = [
     id: 'simplistic-glow',
     name: 'Simplistic Glow',
     description: 'Elegant and minimalist balloon design with a beautiful glow effect. Perfect for modern celebrations and stylish events.',
-    price: 25.00,
+    price: 60.00,
     image: '/images/simplistic-glow-25.jpg',
     images: [
       '/images/simplistic-glow-25.jpg'
@@ -217,7 +143,6 @@ export const categories = [
   'All',
   'Romance',
   'Luxury',
-  'Floral',
   'Kids',
   'Adult',
   'Modern'
