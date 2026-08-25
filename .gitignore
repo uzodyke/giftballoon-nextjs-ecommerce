@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# source images staging folder (originals; renamed copies live in public/images)
+public/images/Choice/
+
+# windows/wsl download artifacts
+*:Zone.Identifier
