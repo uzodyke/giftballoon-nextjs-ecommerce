@@ -77,11 +77,6 @@ export default function Location() {
 
               <div className="space-y-3">
                 <div>
-                  <h4 className="font-semibold text-gray-900">Free Delivery:</h4>
-                  <p className="text-gray-600">Orders over £50 - anywhere in the UK</p>
-                </div>
-
-                <div>
                   <h4 className="font-semibold text-gray-900">Standard Delivery (£5.99):</h4>
                   <p className="text-gray-600">England & Wales (2-3 business days)</p>
                 </div>

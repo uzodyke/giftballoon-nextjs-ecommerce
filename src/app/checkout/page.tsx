@@ -180,13 +180,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Delivery</span>
-                <span>
-                  {deliveryFee === 0 ? (
-                    <span className="text-green-600 font-medium">FREE</span>
-                  ) : (
-                    `£${deliveryFee.toFixed(2)}`
-                  )}
-                </span>
+                <span>£{deliveryFee.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-lg font-semibold text-gray-900 border-t pt-2">
                 <span>Total</span>

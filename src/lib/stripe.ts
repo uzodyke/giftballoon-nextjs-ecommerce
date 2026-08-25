@@ -62,9 +62,9 @@ export const stripeConfig = {
   },
 }
 
-// Delivery fee calculation
-export const calculateDeliveryFee = (subtotal: number): number => {
-  return subtotal >= 50 ? 0 : 5.99
+// Delivery fee calculation (flat standard delivery)
+export const calculateDeliveryFee = (_subtotal: number): number => {
+  return 5.99
 }
 
 // Order total calculation

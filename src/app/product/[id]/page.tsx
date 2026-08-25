@@ -330,7 +330,6 @@ export default function ProductDetailPage() {
             {/* Additional Info */}
             <div className="border-t pt-6 space-y-4">
               <div className="text-sm text-gray-600">
-                <p><strong>Free delivery</strong> on orders over £50</p>
                 <p><strong>Same day delivery</strong> available in London</p>
                 <p><strong>Custom arrangements</strong> available on request</p>
               </div>

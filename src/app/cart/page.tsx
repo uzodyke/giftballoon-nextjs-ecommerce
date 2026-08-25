@@ -4,11 +4,12 @@ import { useCart } from '@/context/CartContext'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
+import { calculateDeliveryFee } from '@/lib/stripe'
 
 export default function CartPage() {
   const { cartItems, updateQuantity, removeItem, clearCart, getTotalPrice } = useCart()
 
-  const deliveryFee = getTotalPrice() >= 50 ? 0 : 5.99
+  const deliveryFee = calculateDeliveryFee(getTotalPrice())
   const total = getTotalPrice() + deliveryFee
 
   if (cartItems.length === 0) {
@@ -143,19 +144,8 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Delivery</span>
-                  <span>
-                    {deliveryFee === 0 ? (
-                      <span className="text-green-600 font-medium">FREE</span>
-                    ) : (
-                      `£${deliveryFee.toFixed(2)}`
-                    )}
-                  </span>
+                  <span>£{deliveryFee.toFixed(2)}</span>
                 </div>
-                {getTotalPrice() < 50 && (
-                  <div className="text-sm text-amber-600 bg-amber-50 p-3 rounded-lg">
-                    Add £{(50 - getTotalPrice()).toFixed(2)} more for free delivery!
-                  </div>
-                )}
                 <div className="border-t pt-3">
                   <div className="flex justify-between text-lg font-semibold text-gray-900">
                     <span>Total</span>
