@@ -95,18 +95,22 @@ This application is optimized for deployment on Vercel:
 3. **Add Environment Variables** - Configure your Stripe keys in Vercel
 4. **Deploy** - Automatic deployment on every push
 
-## Product Images
+## Products
 
-All balloon product images are included and optimized:
-- Luxury Stuffed Balloons (£45.00)
-- Rose Charm Balloon (£26.00)
-- Teddy Inside Balloon (£35.00)
-- Love Bouquet (£30.00)
-- Wine Balloon (£35.00)
-- Teddy Outside Balloon (£35.00)
-- Golden Treasure Balloon (£35.00)
-- Simplistic Glow (£25.00)
-- Picture Special (£40.00)
+Defined in `src/data/products.ts`, with images in `public/images/`:
+- Stuffed Wine Balloon (£70.00)
+- Stuffed Balloon with Teddy Outside (£70.00)
+- Golden Treasure Stuffed Balloon (£70.00)
+- Simplistic Glow (£60.00)
+- Golden Elegance (£45.00)
+- Luxury Charm (£45.00)
+- Scarlet Elegance (£55.00)
+- Sweet Celebration (£45.00)
+- The Royal Rose (£55.00)
+- The Cherished Teddy (£55.00)
+
+Keep this list, and the catalog in `public/llms.txt`, in sync with
+`products.ts` whenever a product or price changes.
 
 ---
 
