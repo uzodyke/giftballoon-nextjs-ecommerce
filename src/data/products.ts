@@ -16,30 +16,6 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: 'heart-stuffed-balloon',
-    name: 'Heart Stuffed Balloon',
-    description: 'Beautiful heart-shaped balloon perfect for romantic occasions. Filled with surprises and designed to capture hearts.',
-    price: 65.85,
-    image: '/images/heart-stuffed-balloon-30-85.jpg',
-    images: [
-      '/images/heart-stuffed-balloon-30-85.jpg'
-    ],
-    category: 'Romance',
-    inStock: true,
-    options: {
-      styles: [
-        { name: 'Standard Heart', price: 0 },
-        { name: 'With Love Message', price: 5 },
-        { name: 'Premium Gift Inside', price: 15 }
-      ],
-      colors: [
-        { name: 'Classic Red', price: 0 },
-        { name: 'Pink Romance', price: 0 },
-        { name: 'Golden Heart', price: 5 }
-      ]
-    }
-  },
-  {
     id: 'wine-balloon',
     name: 'Stuffed Wine Balloon',
     description: 'Sophisticated balloon arrangement perfect for wine lovers, celebrations, or adult parties. Elegant and mature design.',

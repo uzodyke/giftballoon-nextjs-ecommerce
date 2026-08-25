@@ -98,7 +98,6 @@ This application is optimized for deployment on Vercel:
 ## Product Images
 
 All balloon product images are included and optimized:
-- Heart Stuffed Balloon (£30.85)
 - Luxury Stuffed Balloons (£45.00)
 - Rose Charm Balloon (£26.00)
 - Teddy Inside Balloon (£35.00)
