@@ -4,10 +4,10 @@ import { Star, Heart, Gift, MapPin } from 'lucide-react'
 import { products } from '@/data/products'
 
 export default function Home() {
-  // Featured products for hero section
+  // Featured products for the Featured Collections section
   const featuredProducts = [
-    products.find(p => p.id === 'heart-stuffed-balloon'),
-    products.find(p => p.id === 'golden-treasure-balloon')
+    products.find(p => p.id === 'the-royal-rose'),
+    products.find(p => p.id === 'golden-elegance')
   ].filter((product): product is NonNullable<typeof product> => Boolean(product))
 
   return (
