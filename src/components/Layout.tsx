@@ -135,7 +135,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 GiftBalloon. All rights reserved.</p>
+            <p>
+              &copy; 2024 GiftBalloon. All rights reserved.
+              <span className="mx-2 text-gray-700">&middot;</span>
+              <Link href="/returnpolicy" className="text-xs text-gray-600 hover:text-gray-400 transition-colors">
+                Returns
+              </Link>
+            </p>
           </div>
         </div>
       </footer>
