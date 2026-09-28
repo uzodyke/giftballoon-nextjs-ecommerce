@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { FieldValue } from 'firebase-admin/firestore'
-import { adminDb, isFirebaseAdminConfigured } from '@/lib/firebaseAdmin'
-import type { Address, OrderItem } from '@/lib/types'
+import { adminDb, isFirebaseAdminConfigured, firebaseAdminError } from '@/lib/firebaseAdmin'
+import { sendOrderNotification } from '@/lib/notify'
+import type { Address, Order, OrderItem } from '@/lib/types'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-09-30.clover',
@@ -44,6 +45,34 @@ function parseItems(metadata: Stripe.Metadata): OrderItem[] {
   }
 }
 
+function buildOrder(pi: Stripe.PaymentIntent, orderId: string): Order {
+  const pm = pi.payment_method as Stripe.PaymentMethod | null
+  const billingDetails = pm?.billing_details
+  const billingAddress = toAddress(billingDetails?.address)
+  const deliveryAddress = toAddress(pi.shipping?.address)
+
+  return {
+    orderId,
+    paymentIntentId: pi.id,
+    status: 'paid',
+    customer: {
+      name: billingDetails?.name ?? pi.shipping?.name ?? '',
+      email: billingDetails?.email ?? pi.receipt_email ?? '',
+      phone: billingDetails?.phone ?? pi.shipping?.phone ?? '',
+    },
+    billingAddress,
+    deliveryAddress,
+    deliverySameAsBilling: sameAddress(billingAddress, deliveryAddress),
+    deliveryRecipientName: pi.shipping?.name ?? '',
+    items: parseItems(pi.metadata),
+    subtotal: Number(pi.metadata.subtotal) || 0,
+    deliveryFee: Number(pi.metadata.deliveryFee) || 0,
+    total: Number(pi.metadata.total) || pi.amount / 100,
+    currency: pi.currency,
+    createdAt: new Date(pi.created * 1000).toISOString(),
+  }
+}
+
 export async function POST(request: NextRequest) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
   const signature = request.headers.get('stripe-signature')
@@ -70,11 +99,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true })
   }
 
-  if (!isFirebaseAdminConfigured || !adminDb) {
-    console.warn('Firebase admin not configured — order not persisted')
-    return NextResponse.json({ received: true })
-  }
-
+  let order: Order
   try {
     const intentId = (event.data.object as Stripe.PaymentIntent).id
     // Re-fetch with the payment method expanded so we get billing details.
@@ -88,46 +113,66 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ received: true })
     }
 
-    const pm = pi.payment_method as Stripe.PaymentMethod | null
-    const billingDetails = pm?.billing_details
-    const billingAddress = toAddress(billingDetails?.address)
-    const deliveryAddress = toAddress(pi.shipping?.address)
-    const deliverySameAsBilling = sameAddress(billingAddress, deliveryAddress)
-
-    const order = {
-      orderId,
-      paymentIntentId: pi.id,
-      status: 'paid' as const,
-      customer: {
-        name: billingDetails?.name ?? pi.shipping?.name ?? '',
-        email: billingDetails?.email ?? pi.receipt_email ?? '',
-        phone: billingDetails?.phone ?? '',
-      },
-      billingAddress,
-      deliveryAddress,
-      deliverySameAsBilling,
-      deliveryRecipientName: pi.shipping?.name ?? '',
-      items: parseItems(pi.metadata),
-      subtotal: Number(pi.metadata.subtotal) || 0,
-      deliveryFee: Number(pi.metadata.deliveryFee) || 0,
-      total: Number(pi.metadata.total) || pi.amount / 100,
-      currency: pi.currency,
-      createdAt: FieldValue.serverTimestamp(),
-    }
-
-    // Doc id = orderId makes the write idempotent across Stripe retries.
-    const ref = adminDb.collection('orders').doc(orderId)
-    const existing = await ref.get()
-    if (existing.exists) {
-      await ref.set({ status: 'paid', paymentIntentId: pi.id }, { merge: true })
-    } else {
-      await ref.set(order)
-    }
-
-    console.log('Order persisted from webhook:', orderId)
-    return NextResponse.json({ received: true })
+    order = buildOrder(pi, orderId)
   } catch (error) {
-    console.error('Failed to persist order from webhook:', error)
-    return NextResponse.json({ error: 'Failed to persist order' }, { status: 500 })
+    console.error('Failed to read PaymentIntent from Stripe:', error)
+    return NextResponse.json({ error: 'Failed to read payment' }, { status: 500 })
   }
+
+  // Firestore and email are deliberately independent. A Firestore outage used
+  // to swallow the order entirely; now the email still goes out, and vice
+  // versa. Only a total failure of both returns non-2xx to trigger a retry.
+  const ref = isFirebaseAdminConfigured && adminDb
+    ? adminDb.collection('orders').doc(order.orderId)
+    : null
+
+  // Doc id = orderId makes the write idempotent across Stripe retries, and the
+  // notifiedAt marker stops a retry from re-sending the email.
+  let alreadyNotified = false
+  if (ref) {
+    try {
+      const existing = await ref.get()
+      alreadyNotified = Boolean(existing.exists && existing.data()?.notifiedAt)
+    } catch (error) {
+      console.error('Could not read existing order doc:', error)
+    }
+  }
+
+  const notification = alreadyNotified
+    ? { sent: false, error: 'already notified' }
+    : await sendOrderNotification(order)
+
+  let persisted = false
+  if (!ref) {
+    console.error(
+      'ORDER NOT PERSISTED — Firebase admin unavailable:',
+      order.orderId,
+      firebaseAdminError ?? 'unknown reason'
+    )
+  } else {
+    try {
+      await ref.set(
+        {
+          ...order,
+          createdAt: FieldValue.serverTimestamp(),
+          ...(notification.sent ? { notifiedAt: FieldValue.serverTimestamp() } : {}),
+        },
+        { merge: true }
+      )
+      persisted = true
+      console.log('Order persisted from webhook:', order.orderId)
+    } catch (error) {
+      console.error('ORDER NOT PERSISTED — Firestore write failed:', order.orderId, error)
+    }
+  }
+
+  // Nothing worked: no record, nobody told. Fail loudly so Stripe retries.
+  if (!persisted && !notification.sent && !alreadyNotified) {
+    return NextResponse.json(
+      { error: 'Order could not be recorded or notified' },
+      { status: 500 }
+    )
+  }
+
+  return NextResponse.json({ received: true, persisted, notified: notification.sent })
 }
