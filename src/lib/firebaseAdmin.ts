@@ -68,7 +68,24 @@ if (!hasCredentials) {
   }
 }
 
-export const adminDb: Firestore | null = adminApp ? getFirestore(adminApp) : null
-export const adminAuth: Auth | null = adminApp ? getAuth(adminApp) : null
-export const isFirebaseAdminConfigured = adminApp !== null
+// getFirestore/getAuth can also throw (bad project id, unavailable bundle), so
+// they are guarded too — nothing in this module may take down its importers.
+let db: Firestore | null = null
+let auth: Auth | null = null
+
+if (adminApp) {
+  try {
+    db = getFirestore(adminApp)
+    auth = getAuth(adminApp)
+  } catch (err) {
+    initError = err instanceof Error ? err.message : String(err)
+    db = null
+    auth = null
+    console.error('Firebase admin service init failed:', initError)
+  }
+}
+
+export const adminDb: Firestore | null = db
+export const adminAuth: Auth | null = auth
+export const isFirebaseAdminConfigured = db !== null && auth !== null
 export const firebaseAdminError = initError
