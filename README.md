@@ -102,12 +102,12 @@ Defined in `src/data/products.ts`, with images in `public/images/`:
 - Stuffed Balloon with Teddy Outside (£70.00)
 - Golden Treasure Stuffed Balloon (£70.00)
 - Simplistic Glow (£60.00)
-- Golden Elegance (£45.00)
-- Luxury Charm (£45.00)
+- Golden Elegance (£60.00)
+- Luxury Charm (£60.00)
 - Scarlet Elegance (£55.00)
-- Sweet Celebration (£45.00)
-- The Royal Rose (£55.00)
-- The Cherished Teddy (£55.00)
+- Sweet Celebration (£60.00)
+- The Royal Rose (£60.00)
+- The Cherished Teddy (£60.00)
 
 Keep this list, and the catalog in `public/llms.txt`, in sync with
 `products.ts` whenever a product or price changes.

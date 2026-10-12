@@ -117,7 +117,7 @@ export const products: Product[] = [
     id: 'golden-elegance',
     name: 'Golden Elegance',
     description: 'A refined golden balloon arrangement radiating warmth and sophistication. Perfect for anniversaries, milestone celebrations, and elegant gifting.',
-    price: 45.00,
+    price: 60.00,
     image: '/images/golden-elegance-45.png',
     images: [
       '/images/golden-elegance-45.png'
@@ -129,7 +129,7 @@ export const products: Product[] = [
     id: 'luxury-charm',
     name: 'Luxury Charm',
     description: 'A luxurious stuffed balloon with charming premium detailing. A standout gift for those who appreciate the finer touches.',
-    price: 45.00,
+    price: 60.00,
     image: '/images/luxury-charm-45.png',
     images: [
       '/images/luxury-charm-45.png'
@@ -153,7 +153,7 @@ export const products: Product[] = [
     id: 'sweet-celebration',
     name: 'Sweet Celebration',
     description: 'A cheerful, colourful balloon arrangement made for happy moments. Perfect for birthdays, congratulations, and every sweet occasion.',
-    price: 45.00,
+    price: 60.00,
     image: '/images/sweet-celebration-45.png',
     images: [
       '/images/sweet-celebration-45.png'
@@ -165,7 +165,7 @@ export const products: Product[] = [
     id: 'the-royal-rose',
     name: 'The Royal Rose',
     description: 'A bubble balloon crowned with a single red rose, floating above a black gift box packed with red roses and Ferrero Rocher. A regal gesture for anniversaries, proposals, and Mother\'s Day.',
-    price: 55.00,
+    price: 60.00,
     image: '/images/the-royal-rose-55.png',
     images: [
       '/images/the-royal-rose-55.png'
@@ -177,7 +177,7 @@ export const products: Product[] = [
     id: 'the-cherished-teddy',
     name: 'The Cherished Teddy',
     description: 'A soft teddy nestled in a black gift box with Ferrero Rocher, Maltesers and Snickers, topped with a petal-filled bubble balloon. A warm, heartfelt treat for birthdays, thank-yous, and Mother\'s Day.',
-    price: 55.00,
+    price: 60.00,
     image: '/images/the-cherished-teddy-55.png',
     images: [
       '/images/the-cherished-teddy-55.png'
