@@ -80,6 +80,7 @@ export default function ProductDetailPage() {
     const finalPrice = getPrice()
     addItem({
       id: `${product.id}-${Date.now()}`,
+      productId: product.id,
       name: product.name,
       price: finalPrice,
       quantity,
@@ -100,6 +101,7 @@ export default function ProductDetailPage() {
     const finalPrice = getPrice()
     addItem({
       id: `${product.id}-${Date.now()}`,
+      productId: product.id,
       name: product.name,
       price: finalPrice,
       quantity,

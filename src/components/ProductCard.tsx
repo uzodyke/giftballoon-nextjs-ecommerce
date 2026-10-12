@@ -42,6 +42,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     const finalPrice = getPrice()
     addItem({
       id: `${product.id}-${JSON.stringify(selectedOptions)}`,
+      productId: product.id,
       name: product.name,
       price: finalPrice,
       quantity,

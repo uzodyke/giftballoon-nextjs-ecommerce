@@ -17,8 +17,11 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const subtotal = getTotalPrice()
-  const { deliveryFee, total } = calculateOrderTotal(subtotal)
+  // The server prices the order from the catalogue; show its figures once we
+  // have them so the summary always matches what the card is charged.
+  const [serverTotals, setServerTotals] = useState<{ subtotal: number; deliveryFee: number; total: number } | null>(null)
+  const clientTotals = calculateOrderTotal(getTotalPrice())
+  const { subtotal, deliveryFee, total } = serverTotals ?? clientTotals
 
   useEffect(() => {
     // No items, nothing to pay for — send the customer back to their cart.
@@ -34,19 +37,15 @@ export default function CheckoutPage() {
         setError('')
 
         const requestBody = {
-          amount: total,
-          currency: 'gbp',
           orderDetails: {
             items: cartItems.map(item => ({
               id: item.id || 'unknown',
+              productId: item.productId,
               name: item.name || 'Unknown Item',
               price: item.price || 0,
               quantity: item.quantity || 1,
               selectedOptions: item.selectedOptions || {}
             })),
-            subtotal,
-            deliveryFee,
-            total
           }
         }
 
@@ -78,6 +77,9 @@ export default function CheckoutPage() {
 
         setClientSecret(data.clientSecret)
         setOrderId(data.orderId || 'unknown')
+        if (typeof data.total === 'number') {
+          setServerTotals({ subtotal: data.subtotal, deliveryFee: data.deliveryFee, total: data.total })
+        }
       } catch (err) {
         console.error('Payment intent creation error:', err)
         setError(err instanceof Error ? err.message : 'Failed to initialize payment')
@@ -87,7 +89,7 @@ export default function CheckoutPage() {
     }
 
     createPaymentIntent()
-  }, [cartItems, total, subtotal, deliveryFee, router])
+  }, [cartItems, router])
 
   if (loading) {
     return (

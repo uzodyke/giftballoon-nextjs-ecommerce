@@ -1,9 +1,11 @@
 'use client'
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react'
+import { getUnitPrice, resolveProduct } from '@/lib/pricing'
 
 export interface CartItem {
   id: string
+  productId?: string
   name: string
   price: number
   quantity: number
@@ -67,7 +69,18 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
       return { ...state, isOpen: !state.isOpen }
 
     case 'LOAD_CART':
-      return { ...state, cartItems: action.payload }
+      // Saved carts can hold stale prices; re-price from the catalogue and
+      // drop anything that's no longer sold.
+      return {
+        ...state,
+        cartItems: action.payload.flatMap(item => {
+          const product = resolveProduct(item)
+          const price = getUnitPrice(item)
+          return product && price !== undefined
+            ? [{ ...item, productId: product.id, name: product.name, price }]
+            : []
+        })
+      }
 
     default:
       return state

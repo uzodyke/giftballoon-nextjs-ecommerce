@@ -53,6 +53,7 @@ export default function ShopPage() {
     const finalPrice = getPrice()
     addItem({
       id: `${selectedProduct.id}-${Date.now()}`,
+      productId: selectedProduct.id,
       name: selectedProduct.name,
       price: finalPrice,
       quantity,
@@ -73,6 +74,7 @@ export default function ShopPage() {
     const finalPrice = getPrice()
     addItem({
       id: `${selectedProduct.id}-${Date.now()}`,
+      productId: selectedProduct.id,
       name: selectedProduct.name,
       price: finalPrice,
       quantity,

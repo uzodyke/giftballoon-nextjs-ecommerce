@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { calculateOrderTotal, getUnitPrice, resolveProduct } from '@/lib/pricing'
 
 interface OrderItem {
   id: string
+  productId?: string
   name: string
   price: number
   quantity: number
@@ -27,17 +29,45 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { amount, currency = 'gbp', orderDetails } = body
+    const { orderDetails } = body
+    const currency = 'gbp'
 
-    console.log('Create payment intent request:', { amount, currency, orderDetails })
-
-    // Validate required fields
-    if (!amount || amount <= 0) {
-      return NextResponse.json(
-        { error: 'Invalid amount provided' },
-        { status: 400 }
-      )
+    // Never trust prices or totals from the browser: rebuild every line from
+    // the product catalogue and charge only what the server calculates.
+    const rawItems = Array.isArray(orderDetails?.items) ? orderDetails.items : []
+    if (rawItems.length === 0) {
+      return NextResponse.json({ error: 'Your cart is empty' }, { status: 400 })
     }
+
+    const items: OrderItem[] = []
+    for (const raw of rawItems) {
+      const quantity = Number(raw?.quantity)
+      if (typeof raw?.id !== 'string' || !Number.isInteger(quantity) || quantity < 1 || quantity > 50) {
+        return NextResponse.json({ error: 'Invalid item in cart' }, { status: 400 })
+      }
+      const product = resolveProduct(raw)
+      const price = product && getUnitPrice({ ...raw, quantity })
+      if (!product || price === undefined) {
+        return NextResponse.json(
+          { error: `"${raw.name ?? raw.id}" is no longer available. Please remove it from your cart.` },
+          { status: 400 }
+        )
+      }
+      items.push({
+        id: raw.id,
+        productId: product.id,
+        name: product.name,
+        price,
+        quantity,
+        selectedOptions: raw.selectedOptions ?? {},
+      })
+    }
+
+    const subtotal = Math.round(items.reduce((sum, i) => sum + i.price * i.quantity, 0) * 100) / 100
+    const { deliveryFee, total } = calculateOrderTotal(subtotal)
+    const amount = Math.round(total * 100) / 100
+
+    console.log('Create payment intent request:', { amount, currency, itemCount: items.length })
 
     // Validate Stripe key
     if (!process.env.STRIPE_SECRET_KEY) {
@@ -54,7 +84,6 @@ export async function POST(request: NextRequest) {
     // Persist the cart line-items in the PaymentIntent metadata so the webhook
     // can reconstruct the full order after payment. Stripe caps each metadata
     // value at 500 chars, so the items JSON is split across items_0, items_1…
-    const items = (orderDetails?.items as OrderItem[]) || []
     const itemsJson = JSON.stringify(items)
     const itemChunks: Record<string, string> = {}
     for (let i = 0; i * 450 < itemsJson.length; i++) {
@@ -72,9 +101,9 @@ export async function POST(request: NextRequest) {
           .map((item: OrderItem) => `${item.name} (x${item.quantity})`)
           .join(', ')
           .substring(0, 400), // Keep under 500 char limit
-        subtotal: String(orderDetails?.subtotal ?? ''),
-        deliveryFee: String(orderDetails?.deliveryFee ?? ''),
-        total: String(orderDetails?.total ?? amount),
+        subtotal: String(subtotal),
+        deliveryFee: String(deliveryFee),
+        total: String(amount),
         currency,
         ...itemChunks,
       },
@@ -91,7 +120,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       clientSecret: paymentIntent.client_secret,
       orderId,
-      paymentIntentId: paymentIntent.id
+      paymentIntentId: paymentIntent.id,
+      subtotal,
+      deliveryFee,
+      total: amount,
     })
 
   } catch (error) {

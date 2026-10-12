@@ -62,21 +62,6 @@ export const stripeConfig = {
   },
 }
 
-// Delivery fee calculation (flat standard delivery)
-export const calculateDeliveryFee = (_subtotal: number): number => {
-  return 5.99
-}
-
-// Order total calculation
-export const calculateOrderTotal = (subtotal: number): {
-  subtotal: number
-  deliveryFee: number
-  total: number
-} => {
-  const deliveryFee = calculateDeliveryFee(subtotal)
-  return {
-    subtotal,
-    deliveryFee,
-    total: subtotal + deliveryFee
-  }
-}
+// Fee/total maths lives in pricing.ts so the server can share it without
+// pulling in the browser Stripe SDK.
+export { calculateDeliveryFee, calculateOrderTotal } from './pricing'
