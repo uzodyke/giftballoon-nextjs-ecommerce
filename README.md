@@ -104,7 +104,7 @@ Defined in `src/data/products.ts`, with images in `public/images/`:
 - Simplistic Glow (£60.00)
 - Golden Elegance (£60.00)
 - Luxury Charm (£60.00)
-- Scarlet Elegance (£55.00)
+- Scarlet Elegance (£65.00)
 - Sweet Celebration (£60.00)
 - The Royal Rose (£60.00)
 - The Cherished Teddy (£60.00)

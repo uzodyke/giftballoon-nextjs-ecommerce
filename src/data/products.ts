@@ -141,7 +141,7 @@ export const products: Product[] = [
     id: 'scarlet-elegance',
     name: 'Scarlet Elegance',
     description: 'A striking scarlet balloon arrangement full of romance and drama. Ideal for anniversaries, proposals, and Valentine\'s celebrations.',
-    price: 55.00,
+    price: 65.00,
     image: '/images/scarlet-elegance-55.png',
     images: [
       '/images/scarlet-elegance-55.png'
