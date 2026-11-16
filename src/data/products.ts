@@ -177,7 +177,7 @@ export const products: Product[] = [
     id: 'the-cherished-teddy',
     name: 'The Cherished Teddy',
     description: 'A soft teddy nestled in a black gift box with Ferrero Rocher, Maltesers and Snickers, topped with a petal-filled bubble balloon. A warm, heartfelt treat for birthdays, thank-yous, and Mother\'s Day.',
-    price: 50.00,
+    price: 55.00,
     image: '/images/the-cherished-teddy-55.png',
     images: [
       '/images/the-cherished-teddy-55.png'
